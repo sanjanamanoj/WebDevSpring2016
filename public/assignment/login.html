@@ -36,28 +36,33 @@
 <body>
 <div class="col-sm-50 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <h2>Login</h2>
-    <form >
-
-        <div>
-            <label>Username</label>
-            <div>
-                <input type="email"  placeholder="Username">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Username</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" placeholder="Username">
             </div>
         </div>
-
-        <div>
-            <label>Password</label>
-            <div>
-                <input type="password"  placeholder="Password">
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
             </div>
         </div>
-
-        <div>
-            <div >
-                <button type="submit">Login</button>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Remember me
+                    </label>
+                </div>
             </div>
         </div>
-
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Sign in</button>
+            </div>
+        </div>
     </form>
     </div>
 
