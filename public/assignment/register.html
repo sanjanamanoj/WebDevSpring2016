@@ -8,22 +8,17 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+
 
     <title>Dashboard Template for Bootstrap</title>
 
     <!-- Bootstrap core CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <link href="../../assets/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="dashboard.css" rel="stylesheet">
 
-    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
-    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-    <script type="text/javascript" src="http://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -35,39 +30,35 @@
 <body>
 <div class="col-sm-50 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <h2>Register</h2>
-    <form >
-
-        <div>
-            <label>Username</label>
-            <div>
-                <input type="email"  placeholder="Username">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Username</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputEmail3" placeholder="Username">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Verify Password</label>
+            <div class="col-sm-10">
+                <input type="password" class="form-control" id="inputEmail3" placeholder="Re-enter Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+            <div class="col-sm-10">
+                <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
             </div>
         </div>
 
-        <div>
-            <label>Password</label>
-            <div>
-                <input type="password"  placeholder="Password">
-            </div>
-        </div>
-
-        <div>
-            <label>Verify Password</label>
-            <div>
-                <input type="password" placeholder="Confirm password">
-            </div>
-        </div>
-
-        <div>
-            <label> e-mail</label>
-            <div>
-                <input type="email" placeholder="email">
-            </div>
-        </div>
-
-        <div>
-            <div >
-                <button type="submit" class="btn btn-default">Register</button>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default"><a href="profile.html">Register</a> </button>
             </div>
         </div>
 
@@ -87,9 +78,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Username</a></li>
+                <li class="active"><a href="register.html">Register</a></li>
                 <li><a href="login.html">Login</a></li>
-                <li><a href="register.html">Register</a></li>
+                <li><a href="#">Username</a></li>
+                <li><a href="#">Logout</a></li>
 
             </ul>
             <form class="navbar-form navbar-right">
@@ -103,7 +95,7 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="home.html">Home<span class="sr-only">(current)</span></a></li>
+                <li><a href="home.html">Home<span class="sr-only">(current)</span></a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="admin.html">Admin</a></li>
                 <li><a href="forms.html">Forms</a></li>

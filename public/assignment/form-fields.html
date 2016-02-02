@@ -44,13 +44,13 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#">Form Maker</a>
+
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="#">Username</a></li>
+                <li><a href="#">Logout</a></li>
+
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
@@ -63,10 +63,10 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="home.html">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="home.html">Home <span class="sr-only">(current)</span></a></li>
                 <li><a href="profile.html">Profile</a></li>
                 <li><a href="admin.html">Admin</a></li>
-                <li><a href="forms.html">Forms</a></li>
+                <li class="active"><a href="forms.html">Forms</a></li>
             </ul>
 
         </div>
@@ -76,9 +76,78 @@
 
 
             <ul class="nav nav-tabs">
-                <li role="presentation"><a href="form-fields.html">Forms</a></li>
+                <li role="presentation"><a href="forms.html">Forms</a></li>
                 <li role="presentation" class="active"><a href="form-fields.html">Fields</a></li>
             </ul>
+            <br>
+            <br>
+            <form>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">First Name</label>
+                    <input type="text" class="form-control" id="exampleInputEmail1" placeholder="First Name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Last Name</label>
+                    <input type="text" class="form-control" id="exampleInputPassword1" placeholder="Last Name">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Date of Birth</label>
+                    <input type="date" class="form-control" id="exampleInputPassword1" placeholder="Enter Date">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Gender</label>
+                    <input type="dropdown" class="form-control" id="exampleInputPassword1" placeholder="Enter Gender">
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">Roles</label>
+                    <div class="col-sm-10">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" value="">
+                                Admin
+                            </label>
+                        </div>
+                        <div class="checkbox disabled">
+                            <label>
+                                <input type="checkbox" value="">
+                                Student
+                            </label>
+                        </div>
+                        <div class="checkbox disabled">
+                            <label>
+                                <input type="checkbox" value="">
+                                User
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">License Agreement</label>
+                    <div class="col-sm-10">
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" >
+                                Yes
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2" checked>
+                                No
+                            </label>
+                        </div>
+                    </div>
+                    </div>
+
+            </form>
+
+
+            </div>
+
+
+            </div>
+
+
 
         </div>
     </div>
