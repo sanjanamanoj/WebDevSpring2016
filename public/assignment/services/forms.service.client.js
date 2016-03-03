@@ -9,20 +9,21 @@
 
     function FormService()
     {
-        var forms=
+        var data=
+        {
+
+         forms:
             [
                 {"_id":"000", "title":"Contacts", "userId":123},
                 {"_id":"010", "title":"ToDo",     "userId":123},
                 {"_id":"020", "title":"CDs",      "userId":234}
-            ];
-
-        var serv={
+            ],
             createFormForUser : createFormForUser,
             findAllFormsForUser: findAllFormsForUser,
             deleteFormById: deleteFormById,
             updateFormById: updateFormById
-    };
-        return serv;
+        };
+        return forms;
 
         function createFormForUser(userId, form, callback)
         {

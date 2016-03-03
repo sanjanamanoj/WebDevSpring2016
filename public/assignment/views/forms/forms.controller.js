@@ -16,7 +16,7 @@
             {"_id":"020", "title":"CDs",      "userId":234}
         ];
 
-        $scope.us="hello";
+
 
         // event handler declarations
         $scope.addForm = addForm;
