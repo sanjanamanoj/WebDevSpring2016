@@ -1,9 +1,7 @@
 /**
  * Created by Sanjanamanoj on 2/29/2016.
  */
-(function ()
-{
+(function(){
     angular
-        .module("FormBuilderApp",["ngRoute"])
-
+        .module("EventSchedulerApp",["ngRoute"]);
 })();

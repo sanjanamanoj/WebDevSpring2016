@@ -7,16 +7,7 @@
         .module("FormBuilderApp")
         .controller("FormController",FormController);
 
-    function FormController($scope)
-
-    {
-        $scope.forms = [
-            {"_id":"000", "title":"Contacts", "userId":123},
-            {"_id":"010", "title":"ToDo",     "userId":123},
-            {"_id":"020", "title":"CDs",      "userId":234}
-        ];
-
-
+    function FormController($scope, FormService) {
 
         // event handler declarations
         $scope.addForm = addForm;
@@ -25,41 +16,33 @@
         $scope.updateForm = updateForm;
 
         // event handler implementation
-        function updateForm(form) {
-            if(selectedFormIndex >= 0) {
-                $scope.form[selectedFormIndex] = {
-                    id: form._id,
-                    title: form.title,
-                    userId: form.userId
-                }
-            }
+
+        function addForm(form) {
+            FormService.createFormForUser(userId, form, function (response) {
+                console.log(response)
+            })
         }
+
+
+        function updateForm(form) {
+            FormService.updateFormById(form._id, form, function (response) {
+            })
+        }
+
+
         var selectedFormIndex = -1;
+
         function selectForm(form) {
             selectedFormIndex = $scope.forms.indexOf(form);
             console.log(form);
-            $scope.form = {
-                id: form._id,
-                title: form.title,
-                userId: form.userId
-            };
+
         }
 
-        function addForm(form) {
-            var newForm = {
-                id : form._id,
-                title: form.title,
-                userId: form.userId
-            };
-            $scope.forms.push(newForm);
-        }
 
         function deleteForm(form) {
-            var index = $scope.forms.indexOf(form);
-            console.log("deleteForm: " + index);
-            $scope.forms.splice(index, 1);
+            FormService.deleteFormById(form._id, function () {
+            })
+
         }
-
     }
-
 })();
