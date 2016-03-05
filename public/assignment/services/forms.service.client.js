@@ -1,92 +1,61 @@
-/**
- * Created by Sanjanamanoj on 2/19/2016.
- */
-(function()
-{
+
+"use strict";
+(function () {
     angular
         .module("FormBuilderApp")
-        .factory("FormService",FormService);
+        .factory("FormService", FormService);
 
-    function FormService()
-    {
-        var forms=[];
-        forms=
-            [
-                {"_id":"000", "title":"Contacts", "userId":123},
-                {"_id":"010", "title":"ToDo",     "userId":123},
-                {"_id":"020", "title":"CDs",      "userId":234}
-            ];
-
-        var op= {
+    function FormService() {
+        var forms = [];
+        forms = [
+            {"_id": "000", "title": "Contacts", "userId": 123},
+            {"_id": "010", "title": "ToDo",     "userId": 123},
+            {"_id": "020", "title": "CDs",      "userId": 234}
+        ];
+        var service = {
             createFormForUser: createFormForUser,
             findAllFormsForUser: findAllFormsForUser,
             deleteFormById: deleteFormById,
             updateFormById: updateFormById
-        };
-        return op;
+        }
+        return service;
 
-        function createFormForUser(userId, form, callback)
-        {
-            var newForm=
-            {
-                "_id": (new Date()).getTime(),
-                "title": form.title,
-                "userId": userId
-            };
-            forms.push(newForm);
-            callback(newForm)
+        function createFormForUser(userId, form, callback) {
+            form._id = (new Date).getTime();
+            form.userId = userId;
+            forms.push(form);
+            return callback(form);
         }
 
-
-        function findAllFormsForUser(userId, callback){
-            var userForms=[];
-            for(var form in forms){
-                if(forms[form].userId==userId){
-                    userForms.push(forms[form]);
+        function findAllFormsForUser(userId, callback) {
+            var userForms = [];
+            for(var i in forms) {
+                if (forms[i].userId === userId) {
+                    userForms.push(forms[i]);
                 }
             }
-            callback(userForms);
+            return callback(userForms);
         }
 
-
-
-        function deleteFormById(formId, callback)
-        {
-            var index = forms.indexOf(formId);
-            forms.splice(index, 1);
-            callback(forms);
-        }
-
-        function updateFormById(formId, newForm, callback)
-        {
-            var f = findFormById(formId)
-            if(f!=null)
-            {
-                f.title = newForm.title;
-                callback(f);
-
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-
-
-        function findFormById(formId)
-        {
-            for (var f in forms)
-            {
-                if (forms[f]._id === formId)
-                {
-                    return forms[f];
+        function deleteFormById(formId, callback) {
+            for(var i in forms) {
+                if (forms[i]._id === formId) {
+                    forms.splice(i, 1);
+                    break;
                 }
             }
-            return null;
+            return callback(forms);
         }
 
-
-
+        function updateFormById(formId, newForm, callback) {
+            for(var i in forms) {
+                if (forms[i]._id === formId) {
+                    forms[i].title = newForm.title;
+                    forms[i].userId = newForm.userId;
+                    return callback(forms[i]);
+                }
+            }
+            return callback(null);
+        }
     }
 })();

@@ -1,6 +1,7 @@
 /**
  * Created by Sanjanamanoj on 2/19/2016.
  */
+"use strict";
 (function()
 {
     angular
@@ -69,7 +70,7 @@
         {
             var newUser =
             {
-                "_id" : (new Date()).getTime(),
+                "_id" : new Date().getTime(),
                 "username": user.username,
                 "password": user.password,
                 "firstName" : "",

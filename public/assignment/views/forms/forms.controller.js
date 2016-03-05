@@ -1,56 +1,50 @@
-/**
- * Created by Sanjanamanoj on 2/19/2016.
- */
 "use strict";
-(function()
-{
-    angular
-        .module("FormBuilderApp")
-        .controller("FormController",FormController);
+(function () {
+    angular.module("FormBuilderApp")
+        .controller("FormController", FormController);
 
-    function FormController($scope,$rootScope, FormService, $location) {
+    function FormController($scope, FormService, $rootScope, $location) {
 
-        // event handler declarations
-        $scope.message="hello";
+        $scope.currentUserId = $rootScope.currentUser._id;
+        $scope.forms = FormService.findAllFormsForUser($scope.currentUserId, id);
+
+
         $scope.addForm = addForm;
-        $scope.deleteForm = deleteForm;
-        $scope.selectForm = selectForm;
         $scope.updateForm = updateForm;
+        $scope.selectForm = selectForm;
+        $scope.deleteForm = deleteForm;
 
-        // event handler implementation
-        $scope.user=$rootScope.currentUser._id;
 
-
-        console.log("hellellooo")
-        $scope.userForms = FormService.forms ;
-       console.log(FormService.forms);
         function addForm(form) {
-            var newForm= FormService.createFormForUser($scope.user, form, function (response) {
-                console.log(response)
+            FormService.createFormForUser($scope.currentUserId,{title : form.title}, function(response){});
+            FormService.findAllFormsForUser($scope.currentUserId, function(response){
+                $scope.forms=response;
             });
-            $scope.userForms.push(newForm);
-        }
 
+            $scope.forms.push(newForm);
+
+        }
 
         function updateForm(form) {
-            FormService.updateFormById(form._id, form, function (response) {
-            })
-        }
-
-
-        var selectedFormIndex = -1;
-
-        function selectForm(form) {
-            selectedFormIndex = $scope.forms.indexOf(form);
-            console.log(form);
+            FormService.updateFormById(form._id, form, function(response){});
 
         }
 
+        function selectForm(index) {
+            $scope.form = {
+                _id: $scope.forms[index]._id,
+                title: $scope.forms[index].title,
+                userId: $scope.forms[index].userId
+            }
+        }
 
-        function deleteForm(form) {
-            FormService.deleteFormById(form._id, function () {
-            })
+        function deleteForm(index) {
+            FormService.deleteFormById($scope.forms[index]._id, function(response){});
+            $scope.forms.splice(index, 1);
+        }
 
+        function id(param) {
+            return param;
         }
     }
 })();
