@@ -1,26 +1,34 @@
 /**
  * Created by Sanjanamanoj on 2/19/2016.
  */
+"use strict";
 (function()
 {
     angular
         .module("FormBuilderApp")
         .controller("FormController",FormController);
 
-    function FormController($scope, FormService) {
+    function FormController($scope,$rootScope, FormService, $location) {
 
         // event handler declarations
+        $scope.message="hello";
         $scope.addForm = addForm;
         $scope.deleteForm = deleteForm;
         $scope.selectForm = selectForm;
         $scope.updateForm = updateForm;
 
         // event handler implementation
+        $scope.user=$rootScope.currentUser._id;
 
+
+        console.log("hellellooo")
+        $scope.userForms = FormService.forms ;
+       console.log(FormService.forms);
         function addForm(form) {
-            FormService.createFormForUser(userId, form, function (response) {
+            var newForm= FormService.createFormForUser($scope.user, form, function (response) {
                 console.log(response)
-            })
+            });
+            $scope.userForms.push(newForm);
         }
 
 

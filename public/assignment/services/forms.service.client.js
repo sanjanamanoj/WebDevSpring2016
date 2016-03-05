@@ -17,38 +17,38 @@
                 {"_id":"020", "title":"CDs",      "userId":234}
             ];
 
-        var ops= {
+        var op= {
             createFormForUser: createFormForUser,
             findAllFormsForUser: findAllFormsForUser,
             deleteFormById: deleteFormById,
             updateFormById: updateFormById
-        }
-        return ops;
+        };
+        return op;
 
         function createFormForUser(userId, form, callback)
         {
             var newForm=
             {
-                "_id": (newDate).getTime(),
+                "_id": (new Date()).getTime(),
                 "title": form.title,
-                "userId": form.userId
+                "userId": userId
             };
             forms.push(newForm);
             callback(newForm)
         }
 
 
-        function findAllFormsForUser(userId, callback)
-        {
-            for (var f in forms)
-            {
-                if (forms[f].userId === userId)
-                {
-                    return forms[f];
+        function findAllFormsForUser(userId, callback){
+            var userForms=[];
+            for(var form in forms){
+                if(forms[form].userId==userId){
+                    userForms.push(forms[form]);
                 }
             }
-            return null;
+            callback(userForms);
         }
+
+
 
         function deleteFormById(formId, callback)
         {

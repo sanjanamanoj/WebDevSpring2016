@@ -12,31 +12,38 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
 
-                <li ng-class="{'active': $location.url()=='/register'">
+                <li ng-hide="currentUser" ng-class="{'active': $location.url()=='/register'">
                     <a href="#/register">
                         Register
                     </a>
                 </li>
 
-                <li ng-class="{'active': $location.url()=='/login'"
+                <li ng-hide="currentUser" ng-class="{'active': $location.url()=='/login'"
                     class=" btn-success">
                     <a href="#login">
                         Login
                     </a>
                 </li>
 
-                <li ng-class="{'active': $location.url()=='/register'">
+                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/register'">
                     <a href="#">
-                        Username
+                        {{currentUser.username}}
                     </a>
                 </li>
 
-                <li ng-class="{'active': $location.url()=='/register'"
-                    class=" btn-danger">
-                    <a href="#">
+                <li ng-click="logout()" ng-show="currentUser" class=" btn-danger">
+                    <a href="#/home">
                         Logout
                     </a>
                 </li>
+
+                <li ng-show="currentUser.roles.indexOf('admin')>=0" ng-class="{'active': $location.url()=='/'}">
+                    <a href="#/admin">
+                    Admin
+                    </a>
+                </li>
+
+                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/'}"><a href="#/profile">Profile</a></li>
 
             </ul>
 

@@ -7,7 +7,7 @@
         .module("FormBuilderApp")
         .controller("LoginController",LoginController);
 
-    function LoginController ($scope, UserService, $location, $rootScope) {
+    function LoginController ($scope, UserService, $location) {
         $scope.login = login;
 
         function login(user)

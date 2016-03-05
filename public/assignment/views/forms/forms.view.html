@@ -11,6 +11,7 @@
         <li role="presentation"><a href="fields.view.html">Fields</a></li>
     </ul>
     <div class="table-responsive">
+        {{message}}
 
         <table ng-controller="FormController" class="table table-striped">
             <thead>
@@ -35,8 +36,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr  ng-repeat="form in forms">
-                <td>{{form.title}}</td>
+            <tr  ng-repeat="f in userForms">
+                <td>{{f.title}}</td>
                 <td>
                     <span ng-click="deleteForm(form)" class="glyphicon glyphicon-remove btn btn-danger" aria-hidden="true"></span>
                     <span ng-click="selectForm(form)" class="glyphicon glyphicon-pencil btn btn-success " aria-hidden="true"></span>
