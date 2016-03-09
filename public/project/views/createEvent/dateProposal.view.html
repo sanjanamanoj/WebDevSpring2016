@@ -12,6 +12,9 @@
 </div>
 
 <div class="form-group">
+    <div>
+        <uib-datepicker ng-model='activeDate' multi-select='selectedDates'></uib-datepicker>
+    </div>
     <div class="col-lg-10 col-lg-offset-2">
         <button ng-click="$location.url('/event')" type="reset" class="btn btn-default">Back</button>
         <button ng-click="$location.url('/timeProposal')" type="submit" class="btn btn-primary">Next</button>

@@ -23,7 +23,18 @@
 
   <!-- Custom styles for this template -->
   <link href="cover.css" rel="stylesheet">
-
+  <link type="text/css" rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+  <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+  <script>
+    var autocomplete;
+    function initialize() {
+      autocomplete = new google.maps.places.Autocomplete(
+              /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
+              { types: ['geocode'] });
+      google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      });
+    }
+  </script>
   <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
   <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
   <script type="text/javascript" src="http://gc.kis.scr.kaspersky-labs.com/1B74BD89-2A22-4B93-B451-1C9E1052A0EC/main.js" charset="UTF-8"></script><script src="../../assets/js/ie-emulation-modes-warning.js"></script>

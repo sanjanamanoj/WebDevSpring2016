@@ -24,7 +24,8 @@
                 templateUrl: "views/createEvent/settings.view.html",
             })
             .when("/login",{
-                templateUrl: "views/users/login.view.html"
+                templateUrl: "views/users/login.view.html",
+                controller : "LoginController"
             })
             .when("/dateProposal",{
                 templateUrl: "views/createEvent/dateProposal.view.html"
