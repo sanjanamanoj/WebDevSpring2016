@@ -18,14 +18,14 @@
                     </a>
                 </li>
 
-                <li ng-hide="currentUser" ng-class="{'active': $location.url()=='/login'"
+                <li ng-hide="currentUser" ng-class="{'active': $location.url()=='/login'}"
                     class=" btn-success">
                     <a href="#login">
                         Login
                     </a>
                 </li>
 
-                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/register'">
+                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/register'}">
                     <a href="#">
                         {{currentUser.username}}
                     </a>

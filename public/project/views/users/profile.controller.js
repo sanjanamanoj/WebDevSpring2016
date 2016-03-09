@@ -5,7 +5,7 @@
 (function()
 {
     angular
-        .module("FormBuilderApp")
+        .module("EventSchedulerApp")
         .controller("ProfileController",ProfileController);
 
     function ProfileController($location, $scope, UserService)

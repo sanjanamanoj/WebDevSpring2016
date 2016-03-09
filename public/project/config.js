@@ -37,7 +37,12 @@
                 templateUrl: "views/createEvent/pollCreated.view.html"
             })
             .when("/profile",{
-                templateUrl: "views/users/profile.view.html"
+                templateUrl: "views/users/profile.view.html",
+                controller:"ProfileController"
+            })
+            .when("/myEvents",{
+                templateUrl: "views/myEvents/myEvents.view.html",
+                controller: "MyEventsController"
             })
             .otherwise({
                 redirectTo: "/home"

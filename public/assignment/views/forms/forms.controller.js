@@ -21,7 +21,7 @@
                 $scope.forms=response;
             });
 
-            $scope.forms.push(newForm);
+            $scope.forms.push(form);
 
         }
 

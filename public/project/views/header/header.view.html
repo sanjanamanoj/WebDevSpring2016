@@ -28,21 +28,27 @@
                     </a>
                 </li>
 
-                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/event'">
-                    <a href="#/event">
+                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/myEvents'}">
+                    <a href="#/myEvents">
                         My Events
                     </a>
                 </li>
 
-                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/event'">
+                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/event'}">
                     <a href="#/event">
                         Schedule an Event
                     </a>
                 </li>
 
-                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/profile'">
+                <li ng-show="currentUser" ng-class="{'active': $location.url()=='/profile'}">
                     <a href="#/profile">
                         {{currentUser.name}}
+                    </a>
+                </li>
+
+                <li ng-click="logout()" ng-show="currentUser">
+                    <a href="#/home">
+                        Logout
                     </a>
                 </li>
 
