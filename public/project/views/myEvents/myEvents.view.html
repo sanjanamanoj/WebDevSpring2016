@@ -3,11 +3,13 @@
 <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 
-<div ng-app="EventSchedulerApp" >
+<div>
     <legend>My Events</legend>
-    {{currentUserId}}
+
     <div ng-controller="MyEventsController" class="table-responsive">
 
+        {{currentUserId}}
+        {{newEvent}}
 
         <table  class="table table-striped">
             <thead>
@@ -26,7 +28,7 @@
                     <input ng-model="event.title" type="text" class="form-control">
                 </th>
                 <th>
-                    <span ng-click="addEvent(event)" class="glyphicon glyphicon-plus btn btn-default" aria-hidden="true"></span>
+                    <span ng-click="createEvent(event)" class="glyphicon glyphicon-plus btn btn-default" aria-hidden="true"></span>
                     <span ng-click="updateEvent(event)" class="glyphicon glyphicon-ok btn btn-success " aria-hidden="true"></span>
                 </th>
             </tr>
