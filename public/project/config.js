@@ -44,6 +44,10 @@
                 templateUrl: "views/myEvents/myEvents.view.html",
                 controller: "MyEventsController"
             })
+            .when("/signUp",{
+                templateUrl: "views/users/signUp.view.html",
+                controller: "SignUpController"
+            })
             .otherwise({
                 redirectTo: "/home"
             });

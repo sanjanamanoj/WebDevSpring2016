@@ -8,6 +8,7 @@
 
     function LoginController ($scope, UserService, $location) {
         $scope.login = login;
+        $scope.noAccount = noAccount;
 
         function login(user)
         {
@@ -19,6 +20,11 @@
 
             });
 
+        }
+
+        function noAccount()
+        {
+            $location.url("/signUp");
         }
     }
 })();
