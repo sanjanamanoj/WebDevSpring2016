@@ -22,8 +22,8 @@
 
                 <li ng-hide="currentUser">
                     <a data-toggle="modal" data-target="#dialog" href="#/login">
-                    <span class="glyphicon glyphicon-log-in" style="font-size: 15px" aria-hidden="true"></span>
-                    &nbsp;
+                        <span class="glyphicon glyphicon-log-in" style="font-size: 15px" aria-hidden="true"></span>
+                        &nbsp;
                         Sign Up | Login
                     </a>
                 </li>
@@ -42,7 +42,7 @@
 
                 <li ng-show="currentUser" ng-class="{'active': $location.url()=='/profile'}">
                     <a href="#/profile">
-                        {{currentUser.name}}
+                        Profile
                     </a>
                 </li>
 

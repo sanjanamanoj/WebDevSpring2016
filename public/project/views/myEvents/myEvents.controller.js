@@ -1,6 +1,3 @@
-/**
- * Created by Sanjanamanoj on 3/8/2016.
- */
 "use strict";
 (function () {
     angular
