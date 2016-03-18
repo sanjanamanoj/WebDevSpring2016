@@ -10,6 +10,17 @@
 
     function ProfileController($location, $scope, UserService)
     {
+
+        var vm = this;
+
+        function init() {
+            var currentUser = UserService.getCurrentUser();
+            if(currentUser == null) {
+                $location.url("/home");
+            }
+        }
+        return init();
+
         $scope.currentUser = UserService.getCurrentUser();
         $scope.update = update;
         function update(user)

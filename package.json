@@ -23,8 +23,15 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
     "express": "^3.21.2",
-    "gm.datepicker-multi-select": "^1.0.10"
+    "express-session": "^1.13.0",
+    "gm.datepicker-multi-select": "^1.0.10",
+    "mongoose": "^4.4.7",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {},
   "bundleDependencies": [],

@@ -1,44 +1,7 @@
 
 
 
-<nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-
-
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="forms.view.html">Form Maker</a>
-        </div>
-
-
-        <div id="navbar" class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Username</a></li>
-                <li class="btn btn-danger"><a href="#">Logout</a></li>
-            </ul>
-        </div>
-
-
-    </div>
-</nav>
-
 <div class="container-fluid">
-
-    <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-sidebar">
-                <li><a href="../home/home.view.html">Home <span class="sr-only">(current)</span></a></li>
-                <li><a href="../users/profile.view.html">Profile</a></li>
-                <li><a href="../admin/admin.view.html">Admin</a></li>
-                <li class="active"><a href="forms.view.html">Forms</a></li>
-            </ul>
-        </div>
-    </div>
 
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
@@ -55,9 +18,28 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-xs-6">
-                            <label for="exampleInputEmail1">
+
                             First Name
-                            </label>
+
+                            <input type="text" class="form-control"  placeholder="First Name">
+                        </div>
+                        <div class="col-xs-6">
+                            <a href="#"><span class="glyphicon glyphicon-pencil btn btn-warning" aria-hidden="true"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-plus btn btn-default" aria-hidden="true"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-remove btn btn-danger" aria-hidden="true"></span></a>
+                            <a href="#"><span class="glyphicon glyphicon-th-list btn btn-info" aria-hidden="true"></span></a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-xs-6">
+
+                            First Name
+
                             <input type="text" class="form-control" id="exampleInputEmail1" placeholder="First Name">
                         </div>
                         <div class="col-xs-6">
@@ -194,21 +176,26 @@
                     <div class="row">
                         <div class="col-xs-6">
                              <label>Add New Field</label>
-                                <select class="form-control">
+                                <select ng-model="model.fieldType" class="form-control">
                                     <option> Single Line Text</option>
-                                    <option> Date</option>
-                                    <option> Dropdown</option>
-                                    <option> Checkboxes</option>
-                                    <option> Radio buttons</option>
-                                    <option> Paragraph Text Field</option>
+                                    <option>Multi Line Text Field</option>
+                                    <option> Date Field</option>
+                                    <option> Dropdown Field</option>
+                                    <option> Checkboxes Field</option>
+                                    <option> Radio buttons Field</option>
                                 </select>
                             </div>
                         <div class="col-xs-2>"></div>
+
+
                         <div class="col-xs-2">
 
-                                <a href="#"><span class="glyphicon glyphicon-ok btn btn-success" aria-hidden="true"></span></a>
+                                <span ng-click="addField(model.fieldType)" class="glyphicon glyphicon-ok btn btn-success" aria-hidden="true"></span>
 
                         </div>
+                    </div>
+                    <div ng-repeat="field in model.fields">
+
                     </div>
                 </div>
 
