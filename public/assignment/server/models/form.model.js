@@ -1,18 +1,16 @@
 var forms = require("./form.mock.json");
-var uuid = require('node-uuid');
-module.exports = function () {
+
+module.exports = function (uuid) {
     var api = {
         createFormForUser: createFormForUser,
         deleteFormById: deleteFormById,
         findAllForms: findAllForms,
         findFormById: findFormById,
-        updateFormById: updateFormById,
+        updateForm: updateForm,
         findFormByTitle: findFormByTitle,
-        findAllFormsForUser: findAllFormsForUser
+        findFormsByUserId: findFormsByUserId
     };
     return api;
-
-
 
     function findFormByTitle(title) {
         for (var f in forms) {
@@ -23,7 +21,7 @@ module.exports = function () {
         return null;
     }
 
-    function findAllFormsForUser(userId) {
+    function findFormsByUserId(userId) {
         var userForms = [];
         for (f in forms) {
             if (forms[f].userId == userId) {
@@ -52,8 +50,6 @@ module.exports = function () {
                 forms.splice(f, 1);
             }
         }
-        console.log("form.model.js");
-        console.log(forms);
     }
 
     function createFormForUser (userId, newForm) {
@@ -67,7 +63,7 @@ module.exports = function () {
         return forms;
     }
 
-    function updateFormById (id, form) {
+    function updateForm (id, form) {
         for (var f in forms) {
             if (forms[f]._id === id) {
                 forms[f] = form;

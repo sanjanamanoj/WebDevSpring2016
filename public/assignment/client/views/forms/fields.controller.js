@@ -2,9 +2,9 @@
 (function(){
     angular
         .module("FormBuilderApp")
-        .controller("FieldsController", FieldsController);
+        .controller("FieldController", FieldController);
 
-    function FieldsController(FieldService, FormService, $routeParams, $route) {
+    function FieldController(FieldService, FormService, $routeParams) {
         var vm = this;
         vm.cField = null;
         vm.eField = null;
@@ -46,10 +46,10 @@
 
         function init() {
             FieldService
-                .getFieldsForForm(formId)
+                .findFieldsByForm(formId)
                 .then(render);
             FormService
-                .findFieldsForForm(formId)
+                .getFormById(formId)
                 .then(function (response)
                 {
                     vm.form = response.data;
@@ -75,13 +75,12 @@
         function deleteField(field) {
             vm.cField = null;
             FieldService
-                .deleteFieldFromForm(formId, field._id)
+                .deleteField(formId, field._id)
                 .then(init);
         }
 
         function translateFieldType(fieldType) {
             for (var k in optionMap) {
-                console.log(optionMap[k].key + " " + optionMap[k].value);
                 if (optionMap[k].key == fieldType){
                     return optionMap[k].value;
                 }
@@ -90,9 +89,8 @@
 
         function addField(fieldType) {
             var field = {"label": "", "type": translateFieldType(fieldType), "placeholder": "", "options": null};
-            console.log(field);
             FieldService
-                .createFieldForForm(formId, field)
+                .createField(formId, field)
                 .then(init);
         }
 
@@ -108,9 +106,7 @@
                 for (var o in ol) {
                     optionList.push(ol[o].label + ":" + ol[o].value)
                 }
-                console.log(optionList);
                 vm.optionText = optionList.join("\n");
-                console.log(vm.optionText);
             }
         }
 
@@ -121,7 +117,6 @@
 
             var optionArray = [];
             if (isOption) {
-                console.log(vm.optionText);
                 var oa = vm.optionText;
                 for (var o in oa) {
                     var a = oa[o].split(":");
@@ -135,7 +130,6 @@
             }
             else {
             }
-            console.log(vm.eField._id);
             FieldService
                 .updateField(formId, vm.eField._id, vm.eField)
                 .then(init);

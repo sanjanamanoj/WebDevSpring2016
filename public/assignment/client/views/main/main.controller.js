@@ -1,16 +1,9 @@
-/**
- * Created by Sanjanamanoj on 2/19/2016.
- */
-"use strict";
-(function()
-{
+(function(){
     angular
         .module("FormBuilderApp")
-        .controller("MainController",MainController)
+        .controller("MainController",MainController);
 
-    function MainController($scope, $location)
-    {
+    function MainController($scope, $location){
         $scope.$location=$location;
     }
-
 })();

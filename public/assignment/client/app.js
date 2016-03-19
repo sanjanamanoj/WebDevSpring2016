@@ -1,10 +1,4 @@
-/**
- * Created by Sanjanamanoj on 2/19/2016.
- */
-"use strict";
-(function ()
-{
+(function(){
     angular
-        .module("FormBuilderApp",["ngRoute"])
-
+        .module("FormBuilderApp",["ngRoute", "ui.sortable"]);
 })();

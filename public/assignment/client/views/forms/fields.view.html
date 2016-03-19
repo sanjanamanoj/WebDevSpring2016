@@ -1,19 +1,19 @@
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="FieldsController">
-    <h1 class="page-header">{{model.form.title}}</h1>
-
-    <ul class="nav nav-tabs">
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <ul class="nav nav-pills">
         <li role="presentation"><a href="#/forms">Forms</a></li>
-        <li role="presentation" class="active"><a href="#/fields">Fields</a></li>
+        <li role="presentation" class="active"><a>Fields</a></li>
     </ul>
     <br>
-    <table class="table table-responsive ">
-        <tbody ng-model="model.fields"  >
+    <h1 class="page-header">Fields</h1>
+
+    <table class="table table-responsive">
+        <tbody ng-model="model.fields"  ui-sortable="model.fields">
         <tr  ng-switch="field.type" ng-repeat="field in model.fields">
             <td ng-switch-when="TEXT">
                 <label>{{field.label}}</label>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="{{field.placeholder}}">
-                    <div class="input-group-btn " ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn" ng-include="'views/forms/button-option.html'"></div>
                 </div>
             </td>
             <td ng-switch-when="OPTIONS">
@@ -22,14 +22,14 @@
                     <select class="form-control">
                         <option ng-repeat="op in field.options">{{op.label}}</option>
                     </select>
-                    <div class="input-group-btn" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn" ng-include="'views/forms/button-option.html'"></div>
                 </div>
             </td>
             <td ng-switch-when="TEXTAREA">
                 <label>{{field.label}}</label>
                 <div class="input-group">
                     <textarea class="form-control" placeholder="{{field.placeholder}}"></textarea>
-                    <div class="input-group-btn" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn" ng-include="'views/forms/button-option.html'"></div>
                 </div>
             </td>
             <td ng-switch-when="CHECKBOXES">
@@ -43,7 +43,7 @@
                             <br>
                         </div>
                     </div>
-                    <div class="input-group-btn" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn" ng-include="'views/forms/button-option.html'"></div>
                 </div>
             </td>
             <td ng-switch-when="RADIOS">
@@ -55,14 +55,14 @@
                             {{op.label}}
                         </label>
                     </div>
-                    <div class="input-group-btn col-xs-6" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn" ng-include="'views/forms/button-option.html'"></div>
                 </div>
             </td>
             <td ng-switch-default>
                 <label>{{field.label}}</label>
                 <div class="input-group">
                     <input type="date" placeholder="{{field.placeholder}}" class="form-control">
-                    <div class="input-group-btn" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn" ng-include="'views/forms/button-option.html'"></div>
                 </div>
             </td>
             <br>
@@ -169,7 +169,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button ng-click="model.commitEdit(model.eField)" type="button" class="btn btn-default"
+                    <button ng-click="model.commitEdit(model.eField)" type="button" class="btn btn-success"
                             data-dismiss="modal">Confirm
                     </button>
                 </div>

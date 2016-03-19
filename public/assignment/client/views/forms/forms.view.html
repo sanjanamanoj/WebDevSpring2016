@@ -1,57 +1,33 @@
 
-
-
-
-
-
-<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <h1 class="page-header">Forms</h1>
-    <ul class="nav nav-tabs">
-        <li role="presentation" class="active"><a href="#/forms">Forms</a></li>
-        <li role="presentation"><a href="#/fields">Fields</a></li>
+<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main" ng-controller="FormController as model">
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a>Forms</a></li>
+        <li role="presentation"><a href="#/field/">Fields</a></li>
     </ul>
-
-    <div class="table-responsive">
-
-
-        <table  class="table table-striped">
-            <thead>
-            <tr>
-                <th>
-                    <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
-                    Form Name
-                </th>
-                <th>
-                    <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
-                    Action
-                </th>
-            </tr>
-            <tr>
-            <th>
-                <input ng-model="model.form.title" type="text" class="form-control">
+    <br>
+    <h1 class="page-header"> Forms </h1>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Form Name </th>
+            <th> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Action </th>
+        </tr>
+        <tr>
+            <th> <input ng-model="model.form.title" type="text" class="form-control" placeholder="Form Name"> </th>
+            <th> <span ng-click="model.addForm(model.form)"class="glyphicon glyphicon-plus btn btn-success" aria-hidden="true"></span>
+                <span ng-click="model.updateForm(model.form)"class="glyphicon glyphicon-ok btn btn-primary"  aria-hidden="true"></span>
             </th>
-            <th>
-                <span ng-click="model.addForm(model.form)" class="glyphicon glyphicon-plus btn btn-default" aria-hidden="true"></span>
-                <span ng-click="model.updateForm(model.form)" class="glyphicon glyphicon-ok btn btn-success " aria-hidden="true"></span>
-            </th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat="form in model.forms">
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="form in model.userForms">
+            <td> <a href="#/form/{{form._id}}/field"> {{form.title}}</a></td>
+            <td> <span ng-click="model.deleteForm($index)" class="glyphicon glyphicon-remove btn btn-danger"  aria-hidden="true"></span>
+                <span ng-click="model.selectForm($index)" class="glyphicon glyphicon-pencil btn btn-default" aria-hidden="true"></span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-                <td><a href="#/form/{{form._id}}/fields">{{form.title}}</a></td>
 
-                <td>
-                    <span ng-click="model.deleteForm(form)" class="glyphicon glyphicon-remove btn btn-danger" aria-hidden="true"></span>
-                    <span ng-click="model.selectForm($index)" class="glyphicon glyphicon-pencil btn btn-success " aria-hidden="true"></span>
-                </td>
-            </tr>
-
-            </tbody>
-        </table>
-    </div>
 </div>
-
-
-
-

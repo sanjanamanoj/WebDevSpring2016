@@ -1,78 +1,60 @@
-/**
- * Created by Sanjanamanoj on 2/19/2016.
- */
-"use strict";
-(function()
-{
+(function() {
     angular
         .module("FormBuilderApp")
-        .factory("UserService",UserService);
+        .factory("UserService", UserService);
 
-    function UserService($rootScope,$http) {
-
-        var model =
-        {
-            findUserByUsername : findUserByUsername,
-            findUserByCredentials : findUserByCredentials,
-            findAllUsers : findAllUsers,
-            createUser : createUser,
-            deleteUserById : deleteUserById,
-            updateUser : updateUser,
-            setCurrentUser : setCurrentUser,
-            getCurrentUser : getCurrentUser,
-            logout : logout
+    function UserService($http, $rootScope) {
+        var api = {
+            findUserByCredentials: findUserByCredentials,
+            setCurrentUser: setCurrentUser,
+            getCurrentUser: getCurrentUser,
+            findAllUsers: findAllUsers,
+            findUserById: findUserById,
+            createUser: createUser,
+            deleteUserById: deleteUserById,
+            updateUser: updateUser,
+            findUserByUsername: findUserByUsername
         };
-        return model;
+        return api;
 
-
-        function findUserByUsername(username)
-        {
-            return $http.get("/api/assignment/user?username=username" + username);
+        function findUserByCredentials(credentials) {
+            return $http.get("/api/assignment/user?username="+credentials.username +"&password="+credentials.password);
         }
 
-        function findUserByCredentials(credentials)
-        {
-            return $http.get("/api/assignment/user?username=" + credentials.username + "&password=" + credentials.password);
+        function findUserByUsername (username) {
+            return $http.get("/api/assignment/user?username="+username);
         }
 
-        function findAllUsers()
-        {
-            return $http.get("/api/assignment/user");
+        function findUserById(userId){
+            return $http.get("/api/assignment/user/" + userId);
         }
 
-        function createUser(user)
-        {
-           // console.log(user);
-            return $http.post("/api/assignment/user", user);
-        }
-
-        function deleteUserById(id)
-        {
-            return $http.delete("/api/assignment/user/" + id);
-        }
-
-        function updateUser(id, user)
-        {
-           // console.log(user);
-            return $http.put("/api/assignment/user/" + id, user);
-        }
-
-
-        function setCurrentUser(user)
-        {
+        function setCurrentUser(user) {
             $rootScope.currentUser = user;
-
+            console.log($rootScope.currentUser);
         }
 
-        function getCurrentUser()
-        {
+        function getCurrentUser() {
             return $rootScope.currentUser;
         }
 
-
-        function logout()
-        {
-            return $http.post("/api/project/logout");
+        function findAllUsers(){
+            return $http.get("/api/assignment/user");
         }
+        function createUser(user){
+            return $http.post("/api/assignment/user",user);
+        }
+        function deleteUserById(userId){
+            return $http.delete("/api/assignment/user/" + userId);
+        }
+
+        function updateUser(userId,user){
+            console.log("in user services")
+            console.log(user);
+            return $http.put("/api/assignment/user/" + userId, user);
+        }
+
+
+
     }
 })();

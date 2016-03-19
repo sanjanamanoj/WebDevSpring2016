@@ -1,35 +1,21 @@
-/**
- * Created by Sanjanamanoj on 2/19/2016.
- */
-"use strict";
 (function(){
-  angular
-      .module("FormBuilderApp")
-      .controller("HeaderController",HeaderController);
+    angular
+        .module("FormBuilderApp")
+        .controller("HeaderController",HeaderController);
 
-  function HeaderController(UserService,$location){
+    function HeaderController($location, UserService){
+        var vm = this;
 
+        vm.logout = logout;
 
-      var vm = this;
-      vm.logout = logout;
+        function init() {
+            vm.$location = $location;
+        }
+        init();
 
-    function init()
-    {
-      vm.$location = $location;
+        function logout(){
+            UserService.setCurrentUser(null);
+            $location.url("/home");
+        }
     }
-    init();
-
-      function logout()
-      {
-        UserService
-            .logout()
-            .then(function(){
-              UserService.setCurrentUser(null);
-              $location.url("/home");
-            });
-      }
-
-
-    }
-
 })();

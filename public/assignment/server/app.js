@@ -1,13 +1,9 @@
-/**
- * Created by Sanjanamanoj on 3/17/2016.
- */
-module.exports = function(app)
-{
-    var userModel    = require("./models/user.model.js")();
-    var formModel   = require("./models/form.model.js")();
-    var fieldModel = require("./models/field.model.js")(formModel);
+module.exports = function(app,uuid) {
+    var usermodel = require("./models/user.model.js")(uuid);
+    var formmodel = require("./models/form.model.js")(uuid);
+    var fieldModel = require("./models/field.model.js") (uuid, formmodel);
 
-    var userService  = require("./services/user.service.server.js") (app, formModel, userModel);
-    var formService = require("./services/form.service.server.js")(app, formModel, userModel);
-    var fieldService = require("./services/field.service.server.js")(app,formModel,fieldModel);
-};
+    var userservice = require("./services/user.service.server.js")(app, usermodel);
+    var formservice = require("./services/form.service.server.js")(app, formmodel);
+    var fieldService = require("./services/field.service.server.js") (app, formmodel, fieldModel);
+}

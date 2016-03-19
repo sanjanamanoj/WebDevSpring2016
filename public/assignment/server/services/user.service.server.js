@@ -1,105 +1,62 @@
-/**
- * Created by Sanjanamanoj on 3/15/2016.
- */
-module.exports = function (app, formModel, userModel)
-{
-
-    app.get("/api/assignment/user", findUserByCredentials);
-    app.post("/api/assignment/user", createUser);
+module.exports = function(app, userModel) {
+    app.get('/api/assignment/user', userRouter);
+    app.post('/api/assignment/user',createUser);
+    app.get("/api/assignment/user/:id", findUserById);
     app.put("/api/assignment/user/:id", updateUser);
-    app.get("/api/assignment/user", findAllUsers);
-    app.get("/api/assignment/user/", findUserById);
-    app.get("/api/assignment/user",findUserByUsername);
+    app.delete("/api/assignment/user/:id", deleteUser);
 
-    app.delete("/api/assignment/user/:id", deleteUserById);
-    //app.get("/api/assignment/loggedin",loggedin);
-    app.post("/api/project/logout", logout);
-
-
-
-    function createUser (req, res)
-    {
-        var user = req.body;
-
-        res.send (userModel.createUser(user));
-    }
-
-
-    function findAllUsers (req, res)
-    {
-        var users = userModel.findAllUsers();
-        res.json(users);
-    }
-
-
-    function findUserById (req, res)
-    {
-        var id = req.params.id;
-        var user = userModel.findUserById(id);
-        if(user)
-        {
-            res.json(user);
-            return;
+    function userRouter(req, res) {
+        if (req.query.username && req.query.password) {
+            findUserByCredentials(req, res);
         }
-        res.json({message: "User not found"});
-    }
-
-
-    function findUserByUsername(req, res)
-    {
-        var username = req.params.username;
-        var user = userModel.findUserByUsername(username);
-        if(user)
-        {
-            res.json(user);
-            return;
+        else if (req.query.username) {
+            findUserByUsername(req, res);
         }
-        res.json({message: "User not found"});
+        else {
+            getUsers(req, res);
+        }
     }
 
-
-    function findUserByCredentials(req, res)
-    {
-        var user = userModel.findUserByCredentials(req.query.username, req.query.password);
-        console.log(user);
-       // req.session.currentUser = user;
+    function findUserByCredentials(req, res) {
+        var credentials= {
+            username: req.query.username,
+            password: req.query.password
+        }
+        var user = userModel.findUserByCredentials(credentials)
         res.json(user);
     }
 
-    function updateUser(req, res)
-    {
-        var id = req.params.id;
+    function findUserByUsername(req, res){
+        var user = userModel.findUserByUsername(credentials);
+        res.json(user);
+    }
+
+    function getUsers(req,res){
+        var users= userModel.getUsers();
+        res.json(users);
+    }
+
+    function createUser(req,res){
+        var newUser = req.body;
+        var user = userModel.createUser(newUser);
+        res.json(user);
+    }
+
+    function updateUser(req, res) {
         var user = req.body;
-        console.log("Server user service");
-        console.log(id);
-        var userResponse = userModel.updateUser(id, user);
-        if(userResponse)
-        {
-            res.json(userResponse);
-            return;
-        }
-        res.json({message: "User not found"});
+        var userId = req.params.id;
+        res.json(userModel.updateUser(userId, user));
     }
 
-
-
-    function deleteUserById (req, res)
-    {
-        var id = req.params._id;
-        var response = userModel.deleteUserById(id);
-        if (response)
-        {
-            res.send(response);
-            return;
-        }
-        res.json ({message: "User not found"});
+    function deleteUser(req, res) {
+        var id = req.params.id;
+        res.json(userModel.deleteUserById(id));
     }
 
-
-
-    function logout(req, res)
-    {
-        req.session.destroy();
-        res.send(200);
+    function findUserById(req, res) {
+        var userId = req.params.id;
+        var user = userModel.findUserById(userId);
+        res.json(user);
     }
+
 };

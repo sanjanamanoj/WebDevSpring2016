@@ -1,66 +1,52 @@
-"use strict";
-(function () {
-    angular.module("FormBuilderApp")
-        .controller("FormController", FormController);
+(function(){
+    angular
+        .module("FormBuilderApp")
+        .controller("FormController",FormController);
 
-    function FormController($scope, FormService, $rootScope, UserService)
-    {
+    function FormController($location, FormService, $rootScope) {
+
         var vm = this;
+
+        vm.deleteForm = deleteForm;
         vm.addForm = addForm;
         vm.updateForm = updateForm;
-        vm.deleteForm = deleteForm;
         vm.selectForm = selectForm;
-
-
-       // vm.userId= $rootScope.currentUser._id;
-        vm.forms = [];
-        vm.form=null;
-
-        function renderForms (response) {
-
-            vm.forms = response.data;
-        }
-
-        function renderError (response) {
-            return console.log("could not render");
-        }
+        vm.userForms = [];
+        vm.form = null;
 
         function init () {
             FormService
                 .findAllFormsForUser($rootScope.currentUser._id)
-                .then(renderForms, renderError);
+                .then(renderForms);
             vm.form = null;
         }
 
         init();
 
+        function renderForms(response){
+            vm.userForms = response.data;
+        }
 
-        function addForm (form) {
+        function addForm(form) {
             FormService
                 .createFormForUser($rootScope.currentUser._id, form)
-                .then(init, renderError);
+                .then(init);
         }
 
-        function updateForm (form) {
+        function updateForm(form){
             FormService
                 .updateFormById(form._id, form)
-                .then(init, renderError);
+                .then(init);
         }
 
-        function selectForm (fIndex) {
-            vm.form = vm.forms[fIndex];
+        function selectForm(index){
+            vm.form = vm.userForms[index];
         }
 
-
-
-
-        function deleteForm (form) {
-           // console.log(form);
+        function deleteForm(index){
             FormService
-                .deleteFormById(form._id)
-                .then(init, renderError);
+                .deleteFormById(vm.userForms[index]._id)
+                .then(init);
         }
-
-
     }
 })();
