@@ -49,7 +49,7 @@
                 .getFieldsForForm(formId)
                 .then(render);
             FormService
-                .findFormById(formId)
+                .findFieldsForForm(formId)
                 .then(function (response)
                 {
                     vm.form = response.data;

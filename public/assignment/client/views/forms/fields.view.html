@@ -6,14 +6,14 @@
         <li role="presentation" class="active"><a href="#/fields">Fields</a></li>
     </ul>
     <br>
-    <table class="table table-responsive">
+    <table class="table table-responsive ">
         <tbody ng-model="model.fields"  >
         <tr  ng-switch="field.type" ng-repeat="field in model.fields">
             <td ng-switch-when="TEXT">
                 <label>{{field.label}}</label>
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="{{field.placeholder}}">
-                    <div class="input-group-btn" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn " ng-include="'views/forms/buttons.html'"></div>
                 </div>
             </td>
             <td ng-switch-when="OPTIONS">
@@ -55,7 +55,7 @@
                             {{op.label}}
                         </label>
                     </div>
-                    <div class="input-group-btn" ng-include="'views/forms/buttons.html'"></div>
+                    <div class="input-group-btn col-xs-6" ng-include="'views/forms/buttons.html'"></div>
                 </div>
             </td>
             <td ng-switch-default>
