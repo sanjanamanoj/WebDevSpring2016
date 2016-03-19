@@ -12,55 +12,61 @@
 
         var model =
         {
-            findUserByUsername: findUserByUsername,
-            findUserByCredentials: findUserByCredentials,
-            findAllUsers: findAllUsers,
-            createUser: createUser,
-            deleteUserById: deleteUserById,
-            updateUser: updateUser,
+            findUserByUsername : findUserByUsername,
+            findUserByCredentials : findUserByCredentials,
+            findAllUsers : findAllUsers,
+            createUser : createUser,
+            deleteUserById : deleteUserById,
+            updateUser : updateUser,
             setCurrentUser : setCurrentUser,
-            getCurrentUser: getCurrentUser,
+            getCurrentUser : getCurrentUser,
             logout : logout
         };
         return model;
 
 
-        function findUserByUsername(username) {
+        function findUserByUsername(username)
+        {
             return $http.get("/api/assignment/user?username=username" + username);
         }
 
-        function findUserByCredentials(credentials) {
-            return $http.get("/api/assignment/user?username=alice&password=wonderland" + credentials);
+        function findUserByCredentials(credentials)
+        {
+            return $http.get("/api/assignment/user?username=" + credentials.username + "&password=" + credentials.password);
         }
 
-        function findAllUsers() {
+        function findAllUsers()
+        {
             return $http.get("/api/assignment/user");
         }
 
-        function createUser(user) {
+        function createUser(user)
+        {
+           // console.log(user);
             return $http.post("/api/assignment/user", user);
         }
 
         function deleteUserById(id)
         {
-            return $http.delete("/api/assignment/user/:id" + id);
+            return $http.delete("/api/assignment/user/" + id);
         }
 
         function updateUser(id, user)
         {
-            return $http.put("/api/assignment/user/:id" + id, user);
+           // console.log(user);
+            return $http.put("/api/assignment/user/" + id, user);
         }
 
 
         function setCurrentUser(user)
         {
-                       $rootScope.currentUser = user;
-                        console.log($rootScope.currentUser);
-                    }
+            $rootScope.currentUser = user;
+
+        }
 
         function getCurrentUser()
         {
-            return $http.get("/api/project/loggedin");
+            return $rootScope.currentUser;
         }
 
 

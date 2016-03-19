@@ -3,48 +3,64 @@
     angular.module("FormBuilderApp")
         .controller("FormController", FormController);
 
-    function FormController($scope, FormService, $rootScope, $location) {
-
-        $scope.currentUserId = $rootScope.currentUser._id;
-        $scope.forms = FormService.findAllFormsForUser($scope.currentUserId, id);
-
-
-        $scope.addForm = addForm;
-        $scope.updateForm = updateForm;
-        $scope.selectForm = selectForm;
-        $scope.deleteForm = deleteForm;
+    function FormController($scope, FormService, $rootScope, UserService)
+    {
+        var vm = this;
+        vm.addForm = addForm;
+        vm.updateForm = updateForm;
+        vm.deleteForm = deleteForm;
+        vm.selectForm = selectForm;
 
 
-        function addForm(form) {
-            FormService.createFormForUser($scope.currentUserId,{title : form.title}, function(response){});
-            FormService.findAllFormsForUser($scope.currentUserId, function(response){
-                $scope.forms=response;
-            });
+       // vm.userId= $rootScope.currentUser._id;
+        vm.forms = [];
+        vm.form=null;
 
-            $scope.forms.push(form);
+        function renderForms (response) {
 
+            vm.forms = response.data;
         }
 
-        function updateForm(form) {
-            FormService.updateFormById(form._id, form, function(response){});
-
+        function renderError (response) {
+            return console.log("could not render");
         }
 
-        function selectForm(index) {
-            $scope.form = {
-                _id: $scope.forms[index]._id,
-                title: $scope.forms[index].title,
-                userId: $scope.forms[index].userId
-            }
+        function init () {
+            FormService
+                .findAllFormsForUser($rootScope.currentUser._id)
+                .then(renderForms, renderError);
+            vm.form = null;
         }
 
-        function deleteForm(index) {
-            FormService.deleteFormById($scope.forms[index]._id, function(response){});
-            $scope.forms.splice(index, 1);
+        init();
+
+
+        function addForm (form) {
+            FormService
+                .createFormForUser($rootScope.currentUser._id, form)
+                .then(init, renderError);
         }
 
-        function id(param) {
-            return param;
+        function updateForm (form) {
+            FormService
+                .updateFormById(form._id, form)
+                .then(init, renderError);
         }
+
+        function selectForm (fIndex) {
+            vm.form = vm.forms[fIndex];
+        }
+
+
+
+
+        function deleteForm (form) {
+           // console.log(form);
+            FormService
+                .deleteFormById(form._id)
+                .then(init, renderError);
+        }
+
+
     }
 })();

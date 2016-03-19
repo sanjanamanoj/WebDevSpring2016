@@ -7,7 +7,7 @@
         .module("FormBuilderApp")
         .controller("RegisterController", RegisterController);
 
-    function RegisterController($location, $scope, UserService, $rootScope) {
+    function RegisterController($location,UserService, $rootScope) {
 
         var vm = this;
 
@@ -21,15 +21,20 @@
 
         function register(user)
         {
+           console.log(user);
+           // UserService.setCurrentUser(user)
             UserService
                 .createUser(user)
                 .then(function (response)
                 {
-                    var currentUser = response.data;
-                    if (currentUser != null)
-                    {
-                        UserService.setCurrentUser(currentUser);
-                        $location.url("/profile");
+                   var users = response.data;
+                    console.log(users);
+                    //console.log(users);
+                    for(var u in users) {
+                        if (users[u].username == user.username) {
+                            UserService.setCurrentUser(users[u]);
+                            $location.url("/profile");
+                        }
                     }
                 });
         }

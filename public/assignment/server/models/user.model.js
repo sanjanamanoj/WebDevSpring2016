@@ -1,48 +1,5 @@
-var users = [
-    {
-        "_id": "123",
-        "firstName": "Alice",
-        "lastName": "Wonderland",
-        "username": "alice",
-        "password": "alice"
-
-    },
-
-    {
-        "_id": "234",
-        "firstName": "Bob",
-        "lastName": "Hope",
-        "username": "bob",
-        "password": "bob"
-
-    },
-
-    {
-        "_id": "345",
-        "firstName": "Charlie",
-        "lastName": "Brown",
-        "username": "charlie",
-        "password": "charlie"
-
-    },
-
-    {
-        "_id": "456",
-        "firstName": "Dan",
-        "lastName": "Craig",
-        "username": "dan",
-        "password": "dan"
-
-    },
-
-    {
-        "_id": "567",
-        "firstName": "Edward",
-        "lastName": "Norton",
-        "username": "ed",
-        "password": "ed"
-    }
-];
+var users = require('./user.mock.json');
+var uuid = require('node-uuid');
 
 
 module.exports = function(app)
@@ -61,8 +18,19 @@ module.exports = function(app)
 
     function createUser (user)
     {
-        user._id = new Date().getTime();
-        users.push (user);
+        var u = {
+            "_id": uuid.v1(),
+            "username":user.username,
+            "firstName":user.firstName,
+            "lastName":user.lastName,
+            "password":user.password,
+            "email" : user.email
+
+        };
+
+       // user._id = uuid.v1;
+        users.push (u);
+        //console.log(users );
         return users;
     }
 
@@ -98,11 +66,11 @@ module.exports = function(app)
         return null;
     }
 
-    function findUserByCredentials(credentials)
+    function findUserByCredentials(username, password)
     {
         for (var u in users)
         {
-            if(users[u].username===credentials.username && users[u].password === credentials.password)
+            if(users[u].username===username && users[u].password === password)
             {
                 return users[u];
             }
@@ -112,14 +80,19 @@ module.exports = function(app)
 
     function updateUser(id, user)
     {
+        console.log(id);
         for (var u in users)
         {
-            if (users[u]._id === id)
+            console.log(users[u]);
+            if (users[u]._id == id)
             {
                 users[u].firstName = user.firstName;
                 users[u].lastName = user.lastName;
                 users[u].username = user.username;
                 users[u].password = user.password;
+                users[u].email = user.email;
+                console.log("Model");
+                console.log(user);
                 return users[u];
             }
         }

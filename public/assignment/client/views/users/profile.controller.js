@@ -8,30 +8,32 @@
         .module("FormBuilderApp")
         .controller("ProfileController",ProfileController);
 
-    function ProfileController($location, $scope, UserService)
+    function ProfileController($location, UserService)
     {
 
         var vm = this;
 
-        function init() {
+        vm.update = update;
+        vm.user = UserService.getCurrentUser();
+
+        function init()
+        {
             var currentUser = UserService.getCurrentUser();
-            if(currentUser == null) {
+            if(currentUser == null)
+            {
                 $location.url("/home");
             }
         }
         return init();
 
-        $scope.currentUser = UserService.getCurrentUser();
-        $scope.update = update;
+
         function update(user)
         {
-             UserService.updateUser(user._id, user,function(response){
-             UserService.setCurrentUser(response);
-                 console.log(response);
-
-            })
-
-
+            console.log(user);
+            var u= UserService.getCurrentUser();
+            console.log(user._id);
+            UserService.updateUser(u._id,user);
+            $location.url("/profile");
         }
     }
 })();

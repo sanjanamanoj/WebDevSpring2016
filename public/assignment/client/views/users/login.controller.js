@@ -32,7 +32,6 @@
                 {
                     if(response.data)
                     {
-                        console.log(response.data);
                         UserService.setCurrentUser(response.data);
                         $location.url("/profile");
                     }

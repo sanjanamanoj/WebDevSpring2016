@@ -34,40 +34,27 @@
             .when("/profile",{
                 templateUrl:"views/users/profile.view.html",
                 controller:"ProfileController",
-                controllerAs: "model",
-                resolve : {checkLoggedIn : checkLoggedIn}
+                controllerAs: "model"
+
             })
             .when("/forms",{
                 templateUrl:"views/forms/forms.view.html",
                 controller:"FormController",
                 controllerAs: "model"
             })
-            .when("/fields",{
-                templateUrl:"views/forms/fields.view.html",
-                controller:"FieldsController",
-                controllerAs:"model"
+            .when("/form/:formId/fields", {
+                templateUrl: "views/forms/fields.view.html",
+                controller: "FieldsController",
+                controllerAs: "model"
+            })
+            .when("/fields", {
+                templateUrl: "views/forms/fields.view.html",
+                controller: "FieldsController",
+                controllerAs: "model"
             })
             .otherwise({
                 redirectTo:"/home"
             });
 
-        function checkLoggedIn(UserService, $q, $location) {
-
-            var deferred = $q.defer();
-
-            UserService
-                .getCurrentUser()
-                .then(function(response) {
-                    var currentUser = response.data;
-                    if(currentUser) {
-                        UserService.setCurrentUser(currentUser);
-                        deferred.resolve();
-                    } else {
-                        deferred.reject();
-                        $location.url("/home");
-                    }
-                });
-
-            return deferred.promise;
-    }}
+        }
 })();
