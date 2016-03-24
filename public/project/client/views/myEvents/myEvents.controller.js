@@ -4,49 +4,52 @@
         .module("EventSchedulerApp")
         .controller("MyEventsController", MyEventsController);
 
-    function MyEventsController($scope, EventService, $rootScope, $location) {
-        $scope.currentUserId = $rootScope.currentUser._id;
-        $scope.events = [];
-        $scope.events = EventService.findAllEventsForUser($scope.currentUserId, id);
+    function MyEventsController(EventService, $rootScope) {
+        var vm = this;
 
-        $scope.deleteEvent = deleteEvent;
-        $scope.selectEvent = selectEvent;
-        $scope.updateEvent = updateEvent;
-        $scope.createEvent = createEvent;
+        vm.deleteEvent = deleteEvent;
+        vm.addEvent = addEvent;
+        vm.updateEvent = updateEvent;
+        vm.selectEvent = selectEvent;
+        vm.userEvents = [];
+        vm.event = null;
 
-
-        function deleteEvent(index)
-        {
-            EventService.deleteEventById($scope.events[index]._id, function(response){});
-            $scope.events.splice(index, 1);
+        function init () {
+            EventService
+                .findAllEventsForUser($rootScope.currentUser._id)
+                .then(renderEvents);
+            vm.event= null;
         }
 
-        function selectEvent(index)
-        {
-            $scope.event = {
-                _id: $scope.events[index]._id,
-                title: $scope.events[index].title,
-                userId: $scope.events[index].userId
-            }
+        init();
+
+        function renderEvents(response){
+            vm.userEvents = response.data;
         }
 
-        function updateEvent(event)
-        {
-            EventService.updateEventById(event._id, event, function(response){});
-
+        function addEvent(event) {
+            EventService
+                .createEventForUser($rootScope.currentUser._id, event)
+                .then(init);
         }
 
-        function createEvent(event)
-        {
-            var newEvent = EventService.createEventForUser($scope.currentUserId,{
-                title : event.title
-            }, id);
-            $scope.events.push(newEvent);
+        function updateEvent(event){
+            EventService
+                .updateEventById(event._id, event)
+                .then(init);
         }
 
-        function id(param)
-        {
-            return param;
+        function selectEvent(index){
+            console.log(index);
+            vm.event = vm.userEvents[index];
         }
+
+        function deleteEvent(index){
+            console.log(index);
+            EventService
+                .deleteEventById(vm.userEvents[index]._id)
+                .then(init);
+        }
+
     }
 })();
