@@ -12,7 +12,7 @@
                 templateUrl: "views/about/about.view.html"
             })
             .when("/event",{
-                templateUrl: "views/createEvent/event.view.html"
+                templateUrl: "views/createEvent/details.view.html"
             })
             .when("/timeProposal",{
                 templateUrl: "views/createEvent/timeProposal.view.html"
@@ -51,8 +51,14 @@
                 controller: "SignUpController",
                 controllerAs: "model"
             })
+            .when("/event/:eventId/details", {
+                templateUrl: "views/createEvent/details.view.html",
+                controller: "DetailsController",
+                controllerAs: "model"
+            })
+
             .otherwise({
                 redirectTo: "/home"
-            });
-    }
+            })
+            }
 })();
