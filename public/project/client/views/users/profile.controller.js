@@ -1,6 +1,8 @@
-(function(){
+"use strict";
+(function()
+{
     angular
-        .module("FormBuilderApp")
+        .module("EventSchedulerApp")
         .controller("ProfileController",ProfileController);
 
     function ProfileController($location, UserService) {
@@ -9,6 +11,7 @@
         vm.cu=null;
         function init() {
             vm.cu = UserService.getCurrentUser();
+            console.log(vm.cu);
             if (vm.cu == null) {
                 $location.url("/home");
             }

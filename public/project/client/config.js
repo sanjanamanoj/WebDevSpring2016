@@ -22,7 +22,8 @@
             })
             .when("/login",{
                 templateUrl: "views/users/login.view.html",
-                controller : "LoginController"
+                controller : "LoginController",
+                controllerAs: "model"
             })
             .when("/dateProposal",{
                 templateUrl: "views/createEvent/dateProposal.view.html",
@@ -37,15 +38,18 @@
             })
             .when("/profile",{
                 templateUrl: "views/users/profile.view.html",
-                controller:"ProfileController"
+                controller:"ProfileController",
+                controllerAs: "model"
             })
             .when("/myEvents",{
                 templateUrl: "views/myEvents/myEvents.view.html",
-                controller: "MyEventsController"
+                controller: "MyEventsController",
+                controllerAs: "model"
             })
             .when("/signUp",{
                 templateUrl: "views/users/signUp.view.html",
-                controller: "SignUpController"
+                controller: "SignUpController",
+                controllerAs: "model"
             })
             .otherwise({
                 redirectTo: "/home"
