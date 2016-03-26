@@ -12,10 +12,20 @@ module.exports = function (uuid) {
         updateEvent: updateEvent,
         findEventByTitle: findEventByTitle,
         findEventsByUserId: findEventsByUserId,
-        findDetailsForEvent : findDetailsForEvent
+        findDetailsForEvent : findDetailsForEvent,
+        createEvent : createEvent
 
     };
     return api;
+
+    function createEvent(event)
+    {
+     event._id=uuid.v1();
+        event.userId = 123;
+        events.push(event);
+        console.log(events);
+
+    }
 
     function findEventByTitle(title) {
         for (var e in events) {
@@ -38,7 +48,7 @@ module.exports = function (uuid) {
 
     function findEventById (id) {
         for (var e in events) {
-            if (events[e]._id === id) {
+            if (events[e]._id == id) {
                 return events[e];
             }
         }

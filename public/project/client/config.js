@@ -12,7 +12,9 @@
                 templateUrl: "views/about/about.view.html"
             })
             .when("/event",{
-                templateUrl: "views/createEvent/details.view.html"
+                templateUrl: "views/createEvent/event.view.html",
+                controller: "EventController",
+                controllerAs: "model"
             })
             .when("/timeProposal",{
                 templateUrl: "views/createEvent/timeProposal.view.html"
@@ -51,8 +53,8 @@
                 controller: "SignUpController",
                 controllerAs: "model"
             })
-            .when("/event/:eventId/details", {
-                templateUrl: "views/createEvent/details.view.html",
+            .when("/event/details/:eventId", {
+                templateUrl: "views/myEvents/details.view.html",
                 controller: "DetailsController",
                 controllerAs: "model"
             })

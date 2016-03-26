@@ -15,9 +15,14 @@
             findAllEventsForUser: findAllEventsForUser,
             deleteEventById: deleteEventById,
             updateEventById: updateEventById,
-            findDetailsForEvent : findDetailsForEvent
+            findDetailsForEvent : findDetailsForEvent,
+            createEvent : createEvent
         };
         return api;
+
+        function createEvent(event){
+            return $http.post("/api/project/event",event);
+        }
 
         function createEventForUser(userId, event){
             return $http.post("/api/project/user/" + userId + "/event", event);
@@ -37,7 +42,7 @@
 
         function findDetailsForEvent(eventId)
         {
-            return $http.get("/api/project/event"+eventId +"/details");
+            return $http.get("/api/project/event/"+eventId+"/details");
         }
 
 

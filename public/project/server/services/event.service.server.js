@@ -6,7 +6,14 @@ module.exports = function(app, eventModel) {
     app.get("/api/project/event/:eventId/details", findDetailsForEvent);
     app.delete("/api/project/event/:eventId", deleteEventById);
     app.post("/api/project/user/:userId/event", createEventForUser);
+    app.post("/api/project/event",createEvent);
     app.put("/api/project/event/:eventId", updateEventById);
+
+    function createEvent(req,res){
+        var event = req.body;
+        res.json(eventModel.createEvent(event));
+    }
+
 
     function getEventsForUser(req, res) {
         var id = req.params.userId;
@@ -19,9 +26,9 @@ module.exports = function(app, eventModel) {
     function findDetailsForEvent(req,res){
         var id = req.params.eventId;
         console.log(id);
-        var eventDetails = eventModel.findDetailsForEvent(id);
-        console.log(eventDetails);
-        res.json(eventDetails);
+        var event = eventModel.findEventById(id);
+        console.log(event);
+        res.json(event);
     }
 
     function deleteEventById(req, res) {
