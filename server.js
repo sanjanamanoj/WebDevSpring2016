@@ -7,6 +7,8 @@ var multer = require('multer');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var uuid = require('node-uuid');
+// install and require the mongoose library
+var mongoose      = require('mongoose');
 
 
 app.use(express.static(__dirname + '/public'));
@@ -21,7 +23,7 @@ app.use(cookieParser());
 
 
 
-require("./public/assignment/server/app.js")(app, uuid);
+require("./public/assignment/server/app.js")(app, uuid, db, mongoose);
 require("./public/project/server/app.js")(app,uuid);
 
 app.listen(port, ipaddress);
