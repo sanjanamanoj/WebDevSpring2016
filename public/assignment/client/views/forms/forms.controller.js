@@ -30,6 +30,7 @@
         function addForm(form) {
             FormService
                 .createFormForUser($rootScope.currentUser._id, form)
+                //console.log(doc)
                 .then(init);
         }
 

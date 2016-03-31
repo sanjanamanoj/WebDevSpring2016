@@ -1,4 +1,4 @@
-var forms = require("./form.mock.json");
+
 var q = require('q');
 
 module.exports = function (db, mongoose) {
@@ -6,7 +6,7 @@ module.exports = function (db, mongoose) {
     var FormSchema = require('./form.schema.server.js')(mongoose);
 
     // create user model from schema
-    var FormModel = mongoose.model('Form', FormSchema);
+    var FormModel = mongoose.model('form', FormSchema);
 
     var api = {
         createFormForUser: createFormForUser,
@@ -21,7 +21,7 @@ module.exports = function (db, mongoose) {
 
     function findFormByTitle(title) {
         var deferred = q.defer();
-        FormModel.findOne({title:title}, function(err,doc){
+        FormModel.find({title:title}, function(err,doc){
             if(err)
             {
                 deferred.reject(err);
@@ -36,7 +36,7 @@ module.exports = function (db, mongoose) {
 
     function findFormsByUserId(userId) {
         var deferred = q.defer();
-        FormModel.findOne({userId:userId}, function(err,doc){
+        FormModel.find({userId:userId}, function(err,doc){
             if(err)
             {
                 deferred.reject(err);
@@ -97,14 +97,36 @@ module.exports = function (db, mongoose) {
     }
 
     function createFormForUser (userId, newForm) {
-
+        var deferred = q.defer();
+        var userForm = {
+            userId : userId,
+            title : newForm.title,
+            fields : [],
+            created: new Date(),
+            updated: new Date()
+    };
+        FormModel.create(userForm, function(err,doc){
+            console.log(doc);
+            if(err){
+                deferred.reject(err);
+            }
+            else{
+                deferred.resolve(doc);
+            }
+        } );
+        return deferred.promise;
     }
 
     function updateForm (id, form) {
-        for (var f in forms) {
-            if (forms[f]._id === id) {
-                forms[f] = form;
+        var deferred = q.defer();
+        FormModel.update({_id:id}, {$set: form}, function(err,doc){
+            if(err){
+                deferred.reject(err);
             }
-        }
+            else{
+                deferred.resolve(doc);
+            }
+        });
+        return deferred.promise;
     }
 };

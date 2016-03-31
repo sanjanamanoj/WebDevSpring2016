@@ -45,7 +45,7 @@ module.exports = function(app, formModel, fieldModel) {
         fieldModel.deleteField(formId, fieldId)
             .then(
                 function(doc){
-                    res.json(doc);
+                    res.json(200);
                 },
                 function(err){
                     res.status(400).send(err);
