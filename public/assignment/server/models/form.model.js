@@ -15,7 +15,8 @@ module.exports = function (db, mongoose) {
         findFormById: findFormById,
         updateForm: updateForm,
         findFormByTitle: findFormByTitle,
-        findFormsByUserId: findFormsByUserId
+        findFormsByUserId: findFormsByUserId,
+        getMongooseModel: getMongooseModel
     };
     return api;
 
@@ -128,5 +129,10 @@ module.exports = function (db, mongoose) {
             }
         });
         return deferred.promise;
+    }
+
+    function getMongooseModel()
+    {
+        return FormModel;
     }
 };

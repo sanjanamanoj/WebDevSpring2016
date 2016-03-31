@@ -1,4 +1,4 @@
-module.exports = function(app, formModel, fieldModel) {
+module.exports = function(app, fieldModel) {
     app.get("/api/assignment/form/:formId/field", fieldsForFormId);
     app.get("/api/assignment/form/:formId/field/:fieldId", getFieldById);
     app.delete("/api/assignment/form/:formId/field/:fieldId", deleteFieldById);
@@ -7,12 +7,12 @@ module.exports = function(app, formModel, fieldModel) {
 
     function fieldsForFormId(req, res) {
         var formId;
-        var fields;
         formId = req.params.formId;
-        fields = fieldModel.findFieldsByFormId(formId)
+         fieldModel.findFieldsByFormId(formId)
             .then(
-                function(doc){
-                    res.json(doc);
+                function(form){
+                    console.log(form.fields);
+                    res.json(form.fields);
                 },
                 function(err){
                     res.status(400).send(err);
@@ -44,7 +44,7 @@ module.exports = function(app, formModel, fieldModel) {
         fieldId = req.params.fieldId;
         fieldModel.deleteField(formId, fieldId)
             .then(
-                function(doc){
+                function(stat){
                     res.json(200);
                 },
                 function(err){
@@ -58,10 +58,10 @@ module.exports = function(app, formModel, fieldModel) {
         var formId;
         field = req.body;
         formId = req.params.formId;
-        field = fieldModel.createField(formId, field)
+        fieldModel.createField(formId, field)
             .then(
-                function(doc){
-                    res.json(doc);
+                function(form){
+                    res.json(form);
                 },
                 function(err){
                     res.status(400).send(err);

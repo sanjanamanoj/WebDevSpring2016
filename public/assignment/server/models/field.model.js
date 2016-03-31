@@ -1,100 +1,64 @@
-var forms = require("./form.mock.json");
+
 var q = require('q');
 
 module.exports = function (formModel, db, mongoose)
 {
-    var FieldSchema = require('./field.schema.server.js')(mongoose);
+    //var FieldSchema = require('./field.schema.server.js')(mongoose);
+    var Form = formModel.getMongooseModel();
 
-    // create user model from schema
-    var FieldModel = mongoose.model('field', FieldSchema);
 
     var api = {
         createField: createField,
         deleteField: deleteField,
         findField: findField,
-        updateField: updateField,
+
         findFieldsByFormId: findFieldsByFormId
     };
     return api;
 
 
     function createField(formId, field) {
-        var deferred = q.defer();
-        FieldModel.create({_id:id},field,function(err,doc){
-            if(err)
-            {
-                deferred.reject(err);
-            }
-            else
-            {
-                deferred.resolve(doc);
-            }
-        });
-        return deferred.promise;
+        return Form.findById(formId)
+            .then(
+                function(form) {
+                    form.fields.push(field);
+                    console.log(form.fields);
+                    return form.save();
+                }
+            );
     }
 
 
 
     function deleteField(formId, fieldId) {
-       var deferred = q.defer();
-        FieldModel.remove({formId: formId, _id:fieldId}, function(err,doc){
-            if(err)
-            {
-                deferred.reject(err);
-            }
-            else
-            {
-                deferred.resolve(doc);
-            }
-        });
-        return deferred.promise;
+        return Form
+            .findById(formId)
+            .then(
+                function(form){
+                    form.fields.id(fieldId).remove();
+                    return form.save();
+                }
+            );
     }
 
 
-    function findField(formId, fieldId) {
-       var deferred = q.defer();
-        FieldModel.findOne({formId:formId, _id:fieldId},function(err,doc){
-            if(err)
-            {
-                deferred.reject(err);
-            }
-            else
-            {
-                deferred.resolve(doc);
-            }
-        });
-        return deferred.promise;
+    function findField (formId, fieldId) {
+        return Form
+            .findById(formId)
+            .then(
+                function(form){
+                    return form.fields.id(fieldId);
+                }
+            );
     }
 
 
     function findFieldsByFormId(formId) {
-        var deferred = q.defer();
-        FieldModel.find({formId:formId}, function(err,doc){
-            if(err)
-            {
-                deferred.reject(err);
-            }
-            else
-            {
-                deferred.resolve(doc);
-            }
-        });
-        return deferred.promise;
+        // use select() to retrieve a particular field
+        return Form.findById(formId).select("fields");
     }
 
-    function updateField(formId, fieldId, field) {
-       var deferred = q.defer();
-        FieldModel.update({formId:formId,_id:fieldId},{$set:field},function(err,doc){
-            if(err)
-            {
-                deferred.reject(err);
-            }
-            else
-            {
-                deferred.resolve(doc);
-            }
-        });
-        return deferred.promise;
-    }
+
+
 
 };
