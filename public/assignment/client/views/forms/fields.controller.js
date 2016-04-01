@@ -13,6 +13,7 @@
         vm.deleteField = deleteField;
         vm.addField = addField;
         vm.reorder = reorder;
+        vm.sortfields= sortFields;
         vm.options =
             [
                 'Single Line Text Field',
@@ -31,12 +32,24 @@
 
         var optionMap =
             [
-                {key: "Single Line Text Field", value: "TEXT"},
-                {key: "Multi Line Text Field", value: "TEXTAREA"},
-                {key: "Date Field", value: "DATE"},
-                {key: "Dropdown Field", value: "OPTIONS"},
-                {key: "Checkboxes Field", value: "CHECKBOXES"},
-                {key: "Radio Buttons Field", value: "RADIOS"}
+                {key: "Single Line Text Field", value: "TEXT", label:"New Text Field",placeholder:"New Field"},
+                {key: "Multi Line Text Field", value: "TEXTAREA",label:"New Text Field",placeholder:"New Field"},
+                {key: "Date Field", value: "DATE",label:"New Date Field"},
+                {key: "Dropdown Field", value: "OPTIONS",label:"New Dropdown",options:
+                [
+                    {"label": "Option 1", "value": "OPTION_1"},
+                    {"label": "Option 2", "value": "OPTION_2"},
+                    {"label": "Option 3", "value": "OPTION_3"}]},
+                {key: "Checkboxes Field", value: "CHECKBOXES",label:"New Checkboxes","options": [
+                    {"label": "Option A", "value": "OPTION_A"},
+                    {"label": "Option B", "value": "OPTION_B"},
+                    {"label": "Option C", "value": "OPTION_C"}
+                ]},
+                {key: "Radio Buttons Field", value: "RADIOS", label:"New Radio Buttons","options": [
+                    {"label": "Option X", "value": "OPTION_X"},
+                    {"label": "Option Y", "value": "OPTION_Y"},
+                    {"label": "Option Z", "value": "OPTION_Z"}
+                ]}
             ];
 
         function render(response) {
@@ -72,6 +85,20 @@
 
         }
 
+        function sortFields(start, end) {
+                        FieldService
+                            .sortFields(formId, start, end)
+                            .then(
+                                function (response) {
+                                    //vm.fields = response.data;
+                                    init();
+                                },
+                               function (err) {
+                                    vm.error = err;
+                                }
+                           );
+                    }
+
         function deleteField(field) {
             vm.cField = null;
             FieldService
@@ -87,8 +114,32 @@
             }
         }
 
+        function translateLabel(fieldType) {
+            for (var k in optionMap) {
+                if (optionMap[k].key == fieldType){
+                    return optionMap[k].label;
+                }
+            }
+        }
+        function translatePlaceholder(fieldType) {
+            for (var k in optionMap) {
+                if (optionMap[k].key == fieldType){
+                    return optionMap[k].placeholder;
+                }
+            }
+        }
+
+        function translateOptions(fieldType) {
+            for (var k in optionMap) {
+                if (optionMap[k].key == fieldType){
+                    return optionMap[k].options;
+                }
+            }
+        }
+
+
         function addField(fieldType) {
-            var field = {"label": "", "type": translateFieldType(fieldType), "placeholder": "", "options": null};
+            var field = {"label": translateLabel(fieldType), "type": translateFieldType(fieldType), "placeholder": translatePlaceholder(fieldType), "options": translateOptions(fieldType)};
             FieldService
                 .createField(formId, field)
                 .then(init);

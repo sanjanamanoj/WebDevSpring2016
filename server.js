@@ -22,17 +22,23 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 
 var db = mongoose.connect(connectionString);
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(multer());
+app.use(session({
+       secret: 'this is the secret',
+        resave: true,
+        saveUninitialized: true
+}));
+app.use(cookieParser());
+
 app.use(express.static(__dirname + '/public'));
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
 var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(multer());
-app.use(cookieParser());
-
-
-
+app.get('/env', function(req, res){
+    res.json(process.env);
+});
 
 require("./public/assignment/server/app.js")(app, db, mongoose);
 require("./public/project/server/app.js")(app,uuid);

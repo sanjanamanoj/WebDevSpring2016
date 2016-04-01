@@ -86,33 +86,54 @@ module.exports = function(db, mongoose) {
     function createUser(newUser) {
         var deferred = q.defer();
         UserModel.create(newUser, function (err, doc) {
-            console.log(doc);
             if (err) {
+                // reject promise if error
                 deferred.reject(err);
-            }
-            else {
+            } else {
+                // resolve promise
                 deferred.resolve(doc);
             }
         });
+        // return a promise
         return deferred.promise;
     }
 
 
 
-    function updateUser(id, user)
+    function updateUser(userId, user)
     {
+        console.log(userId);
         var deferred = q.defer();
-        UserModel.update({_id: id}, {$set: user}, function (err, doc)
-        {
-            if (err)
+        UserModel.update({_id: userId},
             {
-                deferred.reject(err);
-            }
-            else
+                username:user.username,
+                password:user.password,
+                firstName:user.firstName,
+                lastName:user.lastName,
+                emails:user.emails
+            },
+            function (err, doc)
             {
-                deferred.resolve(doc);
-            }
-        });
+                if (err) {
+                    deferred.reject(err);
+                }
+                else {
+                    console.log(doc);
+                    deferred.resolve(doc);
+                    /*doc.save(
+                        function (err, doc) {
+                            if (err) {
+                                deferred.reject(err);
+                            }
+                            else {
+                                console.log(doc);
+                                deferred.resolve(doc);
+                            }
+                        }
+                    );*/
+                }
+
+            });
         return deferred.promise;
     }
 

@@ -13,7 +13,8 @@
             createUser: createUser,
             deleteUserById: deleteUserById,
             updateUser: updateUser,
-            findUserByUsername: findUserByUsername
+            findUserByUsername: findUserByUsername,
+            logout: logout
         };
         return api;
 
@@ -31,11 +32,10 @@
 
         function setCurrentUser(user) {
             $rootScope.currentUser = user;
-            console.log($rootScope.currentUser);
         }
 
         function getCurrentUser() {
-            return $rootScope.currentUser;
+            return $http.get("/api/assignment/loggedin");
         }
 
         function findAllUsers(){
@@ -49,11 +49,14 @@
         }
 
         function updateUser(userId,user){
-            console.log("in user services")
-            console.log(user);
             return $http.put("/api/assignment/user/" + userId, user);
         }
 
+
+        function logout()
+        {
+            return $http.post("/api/assignment/logout");
+        }
 
 
     }
