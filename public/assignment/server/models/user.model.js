@@ -1,5 +1,4 @@
 
-// load q promise library
 var q = require("q");
 
 module.exports = function(db, mongoose) {
