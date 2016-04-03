@@ -119,17 +119,7 @@ module.exports = function(db, mongoose) {
                 else {
                     console.log(doc);
                     deferred.resolve(doc);
-                    /*doc.save(
-                        function (err, doc) {
-                            if (err) {
-                                deferred.reject(err);
-                            }
-                            else {
-                                console.log(doc);
-                                deferred.resolve(doc);
-                            }
-                        }
-                    );*/
+
                 }
 
             });

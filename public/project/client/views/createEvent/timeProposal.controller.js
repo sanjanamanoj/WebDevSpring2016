@@ -8,7 +8,9 @@
 
         var vm = this;
 
+
             vm.timeSlotsArray = [1];
+
 
 
         this.type = 'individual';
@@ -29,7 +31,7 @@
             $rootScope.event.dateArray = $rootScope.selectedDates;
             $location.url("/timeProposal");
 
-        }
+        };
         vm.addSlots=function(){
             vm.timeSlotsArray.push(vm.timeSlotsArray.length+1);
         }

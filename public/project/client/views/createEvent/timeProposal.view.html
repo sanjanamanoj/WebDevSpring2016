@@ -31,8 +31,8 @@
                     <td>
                         <strong>{{d | date : 'fullDate'}}</strong>
                     </td>
-                    <td ng-repeat="n in model.timeSlotsArray">
-                        <input class ="time-input" type="time"  class="form-control">
+                    <td ng-model=model.event.times" ng-repeat="n in model.timeSlotsArray">
+                        <input  class ="time-input" type="time"  class="form-control">
                     </td>
                     </div>
                 </tr>

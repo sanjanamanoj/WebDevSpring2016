@@ -23,6 +23,8 @@
             })
             .when("/settings",{
                 templateUrl: "views/createEvent/settings.view.html",
+                controller:"SettingsController",
+                controllerAs:"model"
             })
             .when("/login",{
                 templateUrl: "views/users/login.view.html",
@@ -40,7 +42,9 @@
                 controllerAs: "model"
             })
             .when("/pollCreated",{
-                templateUrl: "views/createEvent/pollCreated.view.html"
+                templateUrl: "views/createEvent/pollCreated.view.html",
+                controller:"PollCreatedController",
+                controllerAs:"model"
             })
             .when("/profile",{
                 templateUrl: "views/users/profile.view.html",
@@ -58,7 +62,7 @@
                 controllerAs: "model"
             })
             .when("/event/details/:eventId", {
-                templateUrl: "views/myEvents/details.view.html",
+                templateUrl: "views/myEvents/myEventDetails.view.html",
                 controller: "DetailsController",
                 controllerAs: "model"
             })
