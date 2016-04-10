@@ -20,18 +20,32 @@ module.exports = function (db, mongoose) {
         findEventsByUserId: findEventsByUserId,
         findDetailsForEvent : findDetailsForEvent,
         createEvent : createEvent
-
     };
     return api;
 
-    function createEvent(event)
+    function createEvent(newEvent)
     {
-     var deferred = q.defer();
-        EventModel.create({userId:000},function(err,doc){
+        var deferred = q.defer();
+        var userEvent = {
+            userId : 000,
+            title : newEvent.title,
+            address: newEvent.address,
+            description:newEvent.description,
+            name:newEvent.name,
+            email:newEvent.email,
+            schedule:newEvent.schedule,
+            hidden:newEvent.hidden,
+            oneOption:newEvent.oneOption,
+            limit:newEvent.limit,
+            participate:newEvent.participate,
+            invitedEmails:newEvent.invitedEmails
+        };
+        EventModel.create(userEvent,function(err,doc){
             if(err){
                 deferred.reject(err);
             }
             else{
+                console.log(doc);
                 deferred.resolve(doc);
             }
         });
@@ -67,11 +81,12 @@ module.exports = function (db, mongoose) {
 
     function findEventById (id) {
         var deferred = q.defer();
-        EventModel.findOne({_id:id},function(err, doc){
+        EventModel.findById(id,function(err, doc){
             if(err){
                 deferred.reject(err);
             }
             else{
+                console.log(doc);
                 deferred.resolve(doc);
             }
         });
@@ -125,6 +140,7 @@ module.exports = function (db, mongoose) {
                 deferred.reject(err);
             }
             else{
+                console.log(doc);
                 deferred.resolve(doc);
             }
         });

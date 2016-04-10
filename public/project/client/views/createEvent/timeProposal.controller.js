@@ -7,13 +7,38 @@
     function TimeController($rootScope, $location) {
 
         var vm = this;
+        vm.update = update;
+        vm.change = change;
+        vm.timeSlotsArray = [1];
+        $rootScope.event.schedule =[{}];
+
+        for(var i = 0; i < $rootScope.selectedDates.length; i++){
+           var temp=
+               {
+                   "date": $rootScope.selectedDates[i],
+                   "times": []
+                };
+            $rootScope.event.schedule[i] = temp;
+
+        }
 
 
-            vm.timeSlotsArray = [1];
+        function change(n,d,index){
+            for(var i = 0; i < $rootScope.event.schedule.length; i++){
+                if(d === $rootScope.event.schedule[i].date){
+                    if(n.getTime())
+                    $rootScope.event.schedule[i].times[index] = n.getTime();
+                }
+            }
+        }
 
 
 
-        this.type = 'individual';
+        function update(){
+            //console.log($rootScope.event.schedule);
+            $location.url("/settings");
+
+        }
 
         vm.removeFromSelected = function (dt) {
             $rootScope.selectedDates.splice($rootScope.selectedDates.indexOf(dt), 1);

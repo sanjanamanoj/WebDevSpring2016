@@ -1,63 +1,56 @@
-(function() {
+(function(){
     angular
         .module("FormBuilderApp")
         .factory("UserService", UserService);
 
     function UserService($http, $rootScope) {
         var api = {
-            findUserByCredentials: findUserByCredentials,
-            setCurrentUser: setCurrentUser,
-            getCurrentUser: getCurrentUser,
+            login: login,
+            logout: logout,
+            register: register,
             findAllUsers: findAllUsers,
-            findUserById: findUserById,
-            createUser: createUser,
-            deleteUserById: deleteUserById,
+            deleteUser: deleteUser,
             updateUser: updateUser,
-            findUserByUsername: findUserByUsername,
-            logout: logout
+            createUser: createUser,
+            setCurrentUser: setCurrentUser,
+            getCurrentUser: getCurrentUser
         };
         return api;
 
-        function findUserByCredentials(credentials) {
-            return $http.get("/api/assignment/user?username="+credentials.username +"&password="+credentials.password);
-        }
-
-        function findUserByUsername (username) {
-            return $http.get("/api/assignment/user?username="+username);
-        }
-
-        function findUserById(userId){
-            return $http.get("/api/assignment/user/" + userId);
-        }
-
-        function setCurrentUser(user) {
-            $rootScope.currentUser = user;
-        }
-
-        function getCurrentUser() {
+        function getCurrentUser(){
             return $http.get("/api/assignment/loggedin");
         }
 
-        function findAllUsers(){
-            return $http.get("/api/assignment/user");
+        function setCurrentUser(user){
+            $rootScope.currentUser = user;
         }
-        function createUser(user){
-            return $http.post("/api/assignment/user",user);
-        }
-        function deleteUserById(userId){
-            return $http.delete("/api/assignment/user/" + userId);
-        }
-
-        function updateUser(userId,user){
-            return $http.put("/api/assignment/user/" + userId, user);
-        }
-
-
-        function logout()
-        {
+        function logout() {
             return $http.post("/api/assignment/logout");
         }
 
+        function createUser(user) {
+            return $http.post('/api/assignment/user', user);
+        }
 
+        function updateUser(userId, user) {
+            return $http.put('/api/assignment/user/'+userId, user);
+        }
+
+        function deleteUser(userId) {
+            return $http.delete('/api/assignment/user/'+userId);
+        }
+
+        function findAllUsers() {
+            return $http.get("/api/assignment/user");
+        }
+
+        function register(user) {
+            //console.log(user);
+            return $http.post("/api/assignment/register", user);
+        }
+
+        function login(user) {
+            return $http.post("/api/assignment/login", user);
+        }
     }
 })();

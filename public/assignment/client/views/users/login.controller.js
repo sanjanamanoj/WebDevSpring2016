@@ -15,10 +15,7 @@
             if(!user) {
                 return;
             }
-            UserService.findUserByCredentials({
-                    username: user.username,
-                    password: user.password
-                })
+            UserService.login(user)
                 .then(function(response){
                     if(response.data) {
                         UserService.setCurrentUser(response.data);

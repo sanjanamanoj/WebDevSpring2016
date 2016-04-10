@@ -10,7 +10,7 @@
             if(!$rootScope.selectedDates)
                 $rootScope.selectedDates =[];
 
-                    this.type = 'range';
+                    this.type = 'individual';
 
             vm.removeFromSelected = function(dt) {
                 $rootScope.selectedDates.splice($rootScope.selectedDates.indexOf(dt), 1);

@@ -3,7 +3,7 @@
         .module("FormBuilderApp")
         .controller("RegisterController",registerController);
 
-    function registerController($location, UserService) {
+    function registerController($location, UserService,$rootScope) {
         var vm= this;
         vm.message = null;
         vm.register = register;
@@ -34,10 +34,13 @@
             emails.push(user.emails);
             user.emails=emails;
             UserService
-                .createUser(user)
+                .register(user)
+                //console.log(user)
                 .then(function(response){
+                    console.log(response.data);
                     if(response.data) {
                         UserService.setCurrentUser(response.data);
+                        console.log($rootScope.currentUser);
                         $location.url("/profile");
                     }
                 });

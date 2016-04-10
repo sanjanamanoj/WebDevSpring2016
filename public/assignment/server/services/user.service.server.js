@@ -1,136 +1,255 @@
+var passport      = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
 module.exports = function(app, userModel) {
-    app.get('/api/assignment/user', userRouter);
-    app.post('/api/assignment/user',createUser);
-    app.get("/api/assignment/user/:id", findUserById);
-    app.put("/api/assignment/user/:id", updateUser);
-    app.delete("/api/assignment/user/:id", deleteUser);
-    app.post("/api/assignment/logout",logout);
-    app.get("/api/assignment/loggedin",loggedin);
 
-    function userRouter(req, res) {
-        if (req.query.username && req.query.password) {
-            findUserByCredentials(req, res);
-        }
-        else if (req.query.username) {
-            findUserByUsername(req, res);
-        }
-        else {
-            getUsers(req, res);
-        }
-    }
+    var auth = authorized;
+    app.post('/api/assignment/login', passport.authenticate('local'), login);
+    app.post('/api/assignment/logout', logout);
+    app.post('/api/assignment/register', register);
+    app.post('/api/assignment/user', auth, createUser);
+    app.get('/api/assignment/loggedin', loggedin);
+    app.get('/api/assignment/user', auth, findAllUsers);
+    app.put('/api/assignment/user/:id', auth, updateUser);
+    app.delete('/api/assignment/user/:id', auth, deleteUser);
 
-    function findUserByCredentials(req, res)
-    {
-        var credentials= {
-            username: req.query.username,
-            password: req.query.password
-        };
-        var user = userModel.findUserByCredentials(credentials)
+    passport.use(new LocalStrategy(localStrategy));
+    passport.serializeUser(serializeUser);
+    passport.deserializeUser(deserializeUser);
+
+
+    function localStrategy(username, password, done) {
+        //console.log(username);
+        userModel
+            .findUserByCredentials({username: username, password: password})
             .then(
-                function(doc){
-                    req.session.currentUser = doc;
-                    res.json(doc);
+                function (user) {
+                    console.log(user);
+                    if (!user) {
+                        return done(null, false);
+                    }
+                    return done(null, user);
                 },
-                function(err){
-                    res.status(400).send(err);
+                function (err) {
+                    if (err) {
+                        return done(err);
+                    }
                 }
             );
     }
 
-    function findUserByUsername(req, res)
-    {
-        var username = req.query.username;
-        var user = userModel.findUserByUsername(username)
-            .then(
-                function(doc){
-                    res.json(doc);
-                },
-                function(err){
-                    res.status(400).send(err);
-                }
-            );
+    function serializeUser(user, done) {
+        done(null, user);
     }
 
-
-    function getUsers(req,res)
-    {
-        var users= userModel.getUsers()
+    function deserializeUser(user, done) {
+        userModel
+            .findUserById(user._id)
             .then(
-                function(doc){
-                    res.json(doc);
+                function (user) {
+                    done(null, user);
                 },
-                function(err){
-                    res.status(400).send(err);
+                function (err) {
+                    done(err, null);
                 }
             );
     }
 
 
-    function createUser(req,res)
-    {
+    function login(req, res) {
+        var user = req.user;
+        console.log(user);
+        res.json(user);
+    }
+
+    function loggedin(req, res) {
+        res.send(req.isAuthenticated() ? req.user : '0');
+    }
+
+    function logout(req, res) {
+        req.logOut();
+        res.send(200);
+    }
+
+    function register(req, res) {
         var newUser = req.body;
-        var user = userModel.createUser(newUser)
+        //console.log(newUser);
+        newUser.roles = ['student'];
+
+        userModel
+            .findUserByUsername(newUser.username)
             .then(
-                function(doc){
-                    req.session.currentUser = doc;
-                    res.json(doc);
+                function (user) {
+                    if (user) {
+                        //console.log(user);
+                        res.json(null);
+                    } else {
+                        return userModel.createUser(newUser);
+                    }
                 },
-                function(err){
+                function (err) {
+                    res.status(400).send(err);
+                }
+            )
+            .then(
+                function (user) {
+                    if (user) {
+                        req.login(user, function (err) {
+                            if (err) {
+                                res.status(400).send(err);
+                            } else {
+                                res.json(user);
+                            }
+                        });
+                    }
+                },
+                function (err) {
                     res.status(400).send(err);
                 }
             );
     }
 
-    function updateUser(req, res) {
-        var user = req.body;
-        var userId = req.params.id;
-        userModel.updateUser(userId, user)
-            .then(
-                function(doc)
-                {
-                    req.session.currentUser = req.body;
-                    res.json(doc);
-                },
-                function(err){
-                    res.status(400).send(err);
-                }
-            );
+    function findAllUsers(req, res) {
+        if (isAdmin(req.user)) {
+            userModel
+                .findAllUsers()
+                .then(
+                    function (users) {
+                        res.json(users);
+                    },
+                    function () {
+                        res.status(400).send(err);
+                    }
+                );
+        } else {
+            res.status(403);
+        }
     }
 
     function deleteUser(req, res) {
-        var id = req.params.id;
-        (userModel.deleteUserById(id))
+        if (isAdmin(req.user)) {
+
+            userModel
+                .removeUser(req.params.id)
+                .then(
+                    function (user) {
+                        return userModel.findAllUsers();
+                    },
+                    function (err) {
+                        res.status(400).send(err);
+                    }
+                )
+                .then(
+                    function (users) {
+                        res.json(users);
+                    },
+                    function (err) {
+                        res.status(400).send(err);
+                    }
+                );
+        } else {
+            res.status(403);
+        }
+    }
+
+    function updateUser(req, res) {
+        var newUser = req.body;
+        if (!isAdmin(req.user)) {
+            delete newUser.roles;
+        }
+        if (typeof newUser.roles == "string") {
+            newUser.roles = newUser.roles.split(",");
+        }
+
+        userModel
+            .updateUser(req.params.id, newUser)
             .then(
-                function(doc){
-                    res.json(doc);
+                function (user) {
+                    return userModel.findAllUsers();
                 },
-                function(err){
+                function (err) {
+                    res.status(400).send(err);
+                }
+            )
+            .then(
+                function (users) {
+                    res.json(users);
+                },
+                function (err) {
                     res.status(400).send(err);
                 }
             );
     }
 
-    function findUserById(req, res)
-    {
-        var userId = req.params.id;
-        var user = userModel.findUserById(userId)
+    function createUser(req, res) {
+        var newUser = req.body;
+        if (newUser.roles && newUser.roles.length > 1) {
+            newUser.roles = newUser.roles.split(",");
+        } else {
+            newUser.roles = ["student"];
+        }
+
+        // first check if a user already exists with the username
+        userModel
+            .findUserByUsername(newUser.username)
             .then(
-                function(doc){
-                    res.json(doc);
+                function (user) {
+                    // if the user does not already exist
+                    if (user == null) {
+                        // create a new user
+                        return userModel.createUser(newUser)
+                            .then(
+                                // fetch all the users
+                                function () {
+                                    return userModel.findAllUsers();
+                                },
+                                function (err) {
+                                    res.status(400).send(err);
+                                }
+                            );
+                        // if the user already exists, then just fetch all the users
+                    } else {
+                        return userModel.findAllUsers();
+                    }
                 },
-                function(err){
+                function (err) {
+                    res.status(400).send(err);
+                }
+            )
+            .then(
+                function (users) {
+                    res.json(users);
+                },
+                function () {
                     res.status(400).send(err);
                 }
             )
     }
 
-    function logout(req,res){
-     req.session.destroy();
-        res.send(200);
+    function isAdmin(user) {
+        if (user.roles.indexOf("admin") > 0) {
+            return true
+        }
+        return false;
     }
 
-    function loggedin(req,res){
-        res.json(req.session.currentUser);
+    function authorized(req, res, next) {
+        if (!req.isAuthenticated()) {
+            res.send(401);
+        } else {
+            next();
+        }
     }
-
 };
+
+
+
+
+
+
+
+
+
+
+
+

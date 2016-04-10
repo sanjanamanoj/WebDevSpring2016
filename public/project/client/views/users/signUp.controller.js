@@ -12,7 +12,7 @@
 
         function signUp(user) {
             UserService
-                .createUser(user)
+                .register(user)
                 .then(function (response) {
                     if (response.data) {
                         UserService.setCurrentUser(response.data);

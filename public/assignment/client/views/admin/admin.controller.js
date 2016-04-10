@@ -6,7 +6,7 @@
 {
     angular
         .module("FormBuilderApp")
-        .controller("AdminController", AdminController)
+        .controller("AdminController", AdminController);
 
     function AdminController()
     {

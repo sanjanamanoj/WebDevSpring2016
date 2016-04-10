@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var cookieParser  = require('cookie-parser');
 var multer = require('multer');
 var passport = require('passport');
-var LocalStrategy = require('passport-local');
 var uuid = require('node-uuid');
 // install and require the mongoose library
 var mongoose      = require('mongoose');
@@ -34,6 +33,8 @@ app.use(session({
         saveUninitialized: true
 }));
 app.use(cookieParser());
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
