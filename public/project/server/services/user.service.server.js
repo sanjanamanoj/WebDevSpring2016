@@ -6,7 +6,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 module.exports = function(app, userModel) {
 
     var auth = authorized;
-    app.post('/api/project/login', passport.authenticate('local'), login);
+    app.post('/api/project/login', login);
     app.post('/api/project/logout', logout);
     app.post('/api/project/register', register);
     app.post('/api/project/user', auth, createUser);
@@ -41,7 +41,7 @@ module.exports = function(app, userModel) {
     };
     passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
     passport.use(new GoogleStrategy(googleConfig, googleStrategy));
-    passport.use(new LocalStrategy(localStrategy));
+
     passport.serializeUser(serializeUser);
     passport.deserializeUser(deserializeUser);
 
@@ -115,24 +115,7 @@ module.exports = function(app, userModel) {
             );
     }
 
-    function localStrategy(email, password, done) {
-        userModel
-            .findUserByCredentials({email: email, password: password})
-            .then(
-                function (user) {
-                    console.log(user);
-                    if (!user) {
-                        return done(null, false);
-                    }
-                    return done(null, user);
-                },
-                function (err) {
-                    if (err) {
-                        return done(err);
-                    }
-                }
-            );
-    }
+
 
     function serializeUser(user, done) {
         done(null, user);
