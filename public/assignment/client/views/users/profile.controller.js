@@ -3,7 +3,7 @@
         .module("FormBuilderApp")
         .controller("ProfileController",ProfileController);
 
-    function ProfileController($location, $rootScope, UserService) {
+    function ProfileController($location,  UserService) {
         var vm = this;
         vm.update = update;
         vm.cu=null;

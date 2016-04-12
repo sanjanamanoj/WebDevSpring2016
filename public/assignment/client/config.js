@@ -73,10 +73,14 @@
         {
             $rootScope.errorMessage = null;
             // User is Authenticated
-            if (user !== '0' && user.roles.indexOf('admin') != -1)
+            if (user !== '0' && user.roles.indexOf('admin') > -1)
             {
                 $rootScope.currentUser = user;
                 deferred.resolve();
+            }
+            else
+            {
+                deferred.reject();
             }
         });
 
@@ -109,7 +113,7 @@
         return deferred.promise;
     };
 
-    var checkCurrentUser = function($q, $timeout, $http, $location, $rootScope)
+    var checkCurrentUser = function($q, $http, $location, $rootScope)
     {
         var deferred = $q.defer();
 

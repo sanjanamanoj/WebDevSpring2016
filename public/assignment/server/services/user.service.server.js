@@ -110,14 +110,18 @@ module.exports = function(app, userModel) {
     }
 
     function findAllUsers(req, res) {
+        console.log("calling on server side as well");
+        console.log(req.user);
         if (isAdmin(req.user)) {
             userModel
                 .findAllUsers()
                 .then(
                     function (users) {
+                        console.log("success");
                         res.json(users);
                     },
                     function () {
+                        console.log("error");
                         res.status(400).send(err);
                     }
                 );
@@ -130,12 +134,13 @@ module.exports = function(app, userModel) {
         if (isAdmin(req.user)) {
 
             userModel
-                .removeUser(req.params.id)
+                .deleteUserById(req.params.id)
                 .then(
                     function (user) {
                         return userModel.findAllUsers();
                     },
                     function (err) {
+                        console.log("line 143");
                         res.status(400).send(err);
                     }
                 )
@@ -144,6 +149,7 @@ module.exports = function(app, userModel) {
                         res.json(users);
                     },
                     function (err) {
+                        console.log("line 152");
                         res.status(400).send(err);
                     }
                 );
@@ -227,9 +233,12 @@ module.exports = function(app, userModel) {
     }
 
     function isAdmin(user) {
-        if (user.roles.indexOf("admin") > 0) {
+        console.log("checking user");
+        if (user.roles.indexOf("admin") > -1) {
+            console.log("is admin");
             return true
         }
+        console.log("not admin");
         return false;
     }
 

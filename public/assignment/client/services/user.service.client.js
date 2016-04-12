@@ -37,10 +37,12 @@
         }
 
         function deleteUser(userId) {
+            console.log(userId);
             return $http.delete('/api/assignment/user/'+userId);
         }
 
         function findAllUsers() {
+            console.log("calling find all users");
             return $http.get("/api/assignment/user");
         }
 

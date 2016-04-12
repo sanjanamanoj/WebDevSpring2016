@@ -4,40 +4,33 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Username </th>
-            <th> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Password </th>
-            <th> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Role </th>
-            <th> <span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span> Action </th>
+            <th> <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> Username </th>
+            <th> <span  aria-hidden="true"></span> Password </th>
+            <th> <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> First Name </th>
+            <th> <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> Last Name </th>
+            <th> <span  aria-hidden="true"></span> Role </th>
+            <th> <span  aria-hidden="true"></span> Action </th>
         </tr>
         <tr>
-            <th> <input type="text" class="form-control" placeholder="Username"> </th>
-            <th> <input type="password" class="form-control" placeholder="Password"> </th>
-            <th> <input type="text" class="form-control" placeholder="Role1, Role2"> </th>
-            <th> <a href="#"><span class="glyphicon glyphicon-plus btn-success" ></span></a>&nbsp; &nbsp;
-                <a href="#"><span class="glyphicon glyphicon-ok btn-default" ></span></a> </th>
+            <th> <input ng-model="model.user.username" type="text" class="form-control" placeholder="Username"> </th>
+            <th> <input ng-model="model.user.password" type="password" class="form-control" placeholder="Password"> </th>
+            <th> <input ng-model="model.user.firstName" type="text" class="form-control" placeholder="First Name"> </th>
+            <th> <input ng-model="model.user.lastName" type="text" class="form-control" placeholder="Last Name"> </th>
+            <th> <input ng-model="model.user.roles" type="text" class="form-control" placeholder="Role1, Role2"> </th>
+             <th> <span ng-click="model.add(model.user)" class="glyphicon glyphicon-plus btn btn-success" aria-hidden="true"></span>
+            <span ng-click="model.update(model.user)" class="glyphicon glyphicon-ok btn btn-primary"  aria-hidden="true"></span>
+        </th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td> Alice</td>
-            <td> </td>
-            <td> Student</td>
-            <td><a href="#"> <span class="glyphicon glyphicon-remove btn-danger" ></span></a>&nbsp; &nbsp;
-                <a href="#"><span class="glyphicon glyphicon-pencil btn-primary" ></span></a> </td>
-        </tr>
-        <tr>
-            <td> Bob</td>
-            <td> </td>
-            <td> Faculty | Admin </td>
-            <td> <a href="#"> <span class="glyphicon glyphicon-remove" style="font-size: 25px; color: #d9534f" aria-hidden="true"></span></a>&nbsp; &nbsp;
-                <a href="#"><span class="glyphicon glyphicon-pencil" style="font-size: 25px" aria-hidden="true"></span></a></td>
-        </tr>
-        <tr>
-            <td> Charlie</td>
-            <td> </td>
-            <td> </td>
-            <td><a href="#"> <span class="glyphicon glyphicon-remove" style="font-size: 25px; color: #d9534f" aria-hidden="true"></span></a>&nbsp; &nbsp;
-                <a href="#"><span class="glyphicon glyphicon-pencil" style="font-size: 25px" aria-hidden="true"></span></a> </td>
+        <tr ng-repeat = "user in model.users">
+            <td> {{user.username}}</td>
+            <td> {{user.password}}</td>
+            <td> {{user.firstName}}</td>
+            <td> {{user.lastName}}</td>
+            <td> {{user.roles}}</td>
+            <td> <span ng-click="model.remove(user, $index)" class="glyphicon glyphicon-remove btn btn-danger" ></span>&nbsp; &nbsp;
+                <span ng-click="model.select(user)" class="glyphicon glyphicon-pencil btn btn-primary" ></span></td>
         </tr>
         </tbody>
     </table>

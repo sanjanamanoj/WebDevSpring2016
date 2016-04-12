@@ -12,7 +12,7 @@ module.exports = function(db, mongoose) {
         findUserByCredentials: findUserByCredentials,
         findUserByUsername: findUserByUsername,
         findUserById: findUserById,
-        getUsers: getUsers,
+        findAllUsers: findAllUsers,
         createUser: createUser,
         updateUser: updateUser,
         deleteUserById: deleteUserById
@@ -59,7 +59,7 @@ module.exports = function(db, mongoose) {
         return deferred.promise;
     }
 
-    function getUsers() {
+    function findAllUsers() {
         var deferred = q.defer();
         UserModel.find(function (err, doc) {
             if (err) {
@@ -118,12 +118,15 @@ module.exports = function(db, mongoose) {
     }
 
     function deleteUserById(id) {
+        console.log(id);
         var deferred = q.defer();
         UserModel.remove({_id: id}, function (err, doc) {
             if (err) {
+                console.log("err");
                 deferred.reject(err);
             }
             else {
+                console.log("user is deleting");
                 deferred.resolve(doc);
             }
         });
