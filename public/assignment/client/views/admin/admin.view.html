@@ -4,10 +4,22 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th> <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> Username </th>
+            <th ng-click="model.sortField='username'; model.order= !model.order">
+                <span  ng-show="model.sortField=='username' && !model.order" class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+                <span  ng-show="model.sortField=='username' && model.order" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                Username
+            </th>
             <th> <span  aria-hidden="true"></span> Password </th>
-            <th> <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> First Name </th>
-            <th> <span class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span> Last Name </th>
+            <th ng-click="model.sortField='firstName'; model.order= !model.order">
+                <span  ng-show="model.sortField=='firstName' && !model.order" class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+                <span  ng-show="model.sortField=='firstName' && model.order" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                First Name
+            </th>
+            <th ng-click="model.sortField='lastName'; model.order= !model.order">
+                <span  ng-show="model.sortField=='lastName' && !model.order" class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
+                <span  ng-show="model.sortField=='lastName' && model.order" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
+                Last Name
+            </th>
             <th> <span  aria-hidden="true"></span> Role </th>
             <th> <span  aria-hidden="true"></span> Action </th>
         </tr>
@@ -23,14 +35,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat = "user in model.users">
+        <tr ng-repeat = "user in model.users | orderBy:model.sortField:model.order">
             <td> {{user.username}}</td>
             <td> {{user.password}}</td>
             <td> {{user.firstName}}</td>
             <td> {{user.lastName}}</td>
             <td> {{user.roles}}</td>
             <td> <span ng-click="model.remove(user, $index)" class="glyphicon glyphicon-remove btn btn-danger" ></span>&nbsp; &nbsp;
-                <span ng-click="model.select(user)" class="glyphicon glyphicon-pencil btn btn-primary" ></span></td>
+                <span ng-click="model.select(user)" class="glyphicon glyphicon-cog btn btn-primary" ></span></td>
         </tr>
         </tbody>
     </table>

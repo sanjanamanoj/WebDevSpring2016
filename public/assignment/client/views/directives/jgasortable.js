@@ -1,6 +1,6 @@
-/**
- * Created by Sanjanamanoj on 4/1/2016.
- */
+
+
+
 (function(){
     angular
         .module("jgaDirectives", [])
@@ -23,11 +23,14 @@
                         if(start >= end) {
                             start--;
                         }
-                        scope.model.sortPage(start, end);
+                        scope.jgaSortableCallback({start: start, end: end});
                     }
                 });
         }
         return {
+            scope: {
+                jgaSortableCallback: '&'
+            },
             link: link
         };
     }
