@@ -10,13 +10,13 @@ module.exports = function(app, userModel) {
     app.get('/api/assignment/loggedin',                                    loggedin);
     app.post('/api/assignment/logout',                                     logout);
     app.post('/api/assignment/register',                                   register);
-    app.get('/api/assignment/user?username=:username', findUserByUsername);
+    app.get('/api/assignment/user?username=:username',                     findUserByUsername);
     app.put('/api/assignment/user/:id',                                    updateUser);
-    app.post('/api/assignment/admin/user', isAdmin,                        createUser);
-    app.get('/api/assignment/admin/user',        isAdmin,                        findAllUsers);
-    app.get('/api/assignment/admin/user/:id',    isAdmin,                        findUserById);
-    app.delete('/api/assignment/admin/user/:id', isAdmin,                        deleteUser);
-    app.put('/api/assignment/admin/user/:id',    isAdmin,                        updateUser);
+    app.post('/api/assignment/admin/user',       isAdmin,                  createUser);
+    app.get('/api/assignment/admin/user',        isAdmin,                  findAllUsers);
+    app.get('/api/assignment/admin/user/:id',    isAdmin,                  findUserById);
+    app.delete('/api/assignment/admin/user/:id', isAdmin,                  deleteUser);
+    app.put('/api/assignment/admin/user/:id',    isAdmin,                  updateUser);
 
 
     passport.use(new LocalStrategy(localStrategy));
@@ -84,7 +84,11 @@ module.exports = function(app, userModel) {
     function register(req, res) {
         var newUser = req.body;
         //console.log(newUser);
-        newUser.roles = ['admin'];
+        newUser.roles = ['student'];
+        newUser.emails =newUser.emails.split(",");
+        for(var i in newUser.emails){
+            newUser.emails[i]=newUser.emails[i].trim();
+        }
 
         userModel
             .findUserByUsername(newUser.username)
@@ -159,6 +163,12 @@ module.exports = function(app, userModel) {
         var newUser = req.body;
         if (typeof newUser.roles == "string") {
             newUser.roles = newUser.roles.split(",");
+        }
+        for(var i in newUser.roles){
+            newUser.roles[i]=newUser.roles[i].trim();
+        }
+        for(var i in newUser.emails){
+            newUser.emails[i]=newUser.emails[i].trim();
         }
         userModel
             .updateUser(req.params.id, newUser)
@@ -247,11 +257,11 @@ module.exports = function(app, userModel) {
             if(user.roles.indexOf("admin") > -1) {
                 next();
             }
-        }
+
         else {
             res.send(403);
         }
-    }
+    }}
 
     function findUserByUsername(req, res) {
         var username = req.query.username;

@@ -4,20 +4,146 @@
             .module('EventSchedulerApp')
             .controller('PollController', PollController);
 
-    function PollController($routeParams, EventService) {
+    function PollController($routeParams, EventService,$location) {
+        var vm = this;
+        vm.eventId = $routeParams.eventId;
+        console.log(vm.eventId);
+        window.onbeforeunload=null;
+        vm.slots = [];
+        vm.event = null;
+        vm.save = save;
+        vm.error = error;
+        vm.cannot=cannot;
+        vm.participants = [];
+        vm.dates = [];
+        vm.times = [];
+        vm.pollmessage="";
+        vm.dateSelected = dateSelected;
 
-        var eventId = $routeParams.eventId;
-        console.log(eventId);
-        var vm=this;
+        function init() {
+           // vm.successMessage=null;
+            vm.dates = [];
+            vm.times = [];
+            vm.dateOption = null;
+            vm.newParticipant = null;
+            EventService
+                .findDetailsForEvent(vm.eventId)
+                .then(
+                    function (response) {
+
+                        vm.event = response.data;
+                        vm.hiddenPoll = response.data.hidden;
+                        vm.closePoll=response.data.closePoll;
+                        if(vm.closePoll)
+                        vm.pollmessage="Sorry this poll is closed";
+                        console.log(vm.event.limitNumber);
+                        if (vm.event.limit) {
+                            var flag = false;
+                            for (var i in vm.event.schedule) {
+                                for (var j in vm.event.schedule[i].times) {
+                                    console.log(vm.event.schedule[i].times[j].participants.length);
+                                    if (vm.event.schedule[i].times[j].participants.length < vm.event.limitNumber) {
+                                        flag = true;
+                                    }
+                                }
+                                if (flag)
+                                    vm.dates.push(vm.event.schedule[i].date);
+                            }
+                        }
+                        else {
+                            //console.log("herre");
+                            for (var i in vm.event.schedule) {
+                                //console.log(Date.parse(vm.event.schedule[i].date));
+                                vm.dates.push(vm.event.schedule[i].date);
+                            }
+                        }
+                    });
+
+        }
+
+        init();
+
+        function dateSelected(date) {
+            //console.log(Date.parse(date));
+            vm.times = [];
+            for (var i in vm.event.schedule) {
+                if (Date.parse(date) == Date.parse(vm.event.schedule[i].date)) {
+                    for (var j in vm.event.schedule[i].times) {
+                        if (vm.event.limit) {
+                            if (vm.event.schedule[i].times[j].participants.length < vm.event.limitNumber) {
+                                vm.times.push(vm.event.schedule[i].times[j].time);
+
+                            }
+                        }
+                        else {
+                            vm.times.push(vm.event.schedule[i].times[j].time);
+                            console.log(new Date(vm.event.schedule[i].times[j].time).toString().substr(16, 8));
+                        }
+                    }
+                }
+
+            }
+        }
+
+        function save(participant, date, time) {
+            console.log(time);
+            // vm.newParticipant = null;
+            //console.log(date);
 
 
-        EventService
-            .findDetailsForEvent(eventId)
-            .then(
-                function(response){
-                    console.log(response.data);
-                    vm.event=response.data;
+            for (var i in vm.event.schedule) {
+                if (Date.parse(date) == Date.parse(vm.event.schedule[i].date)) {
+                    console.log("date matches");
+                    for (var j in vm.event.schedule[i].times) {
+                        if (time == new Date(vm.event.schedule[i].times[j].time).toString().substr(16, 8)) {
+                            console.log("time matches");
+                            vm.event.schedule[i].times[j].participants.push(participant);
+                        }
+                    }
+                }
+            }
+            //vm.participants.push(participant);
+            //vm.event.participants = vm.participants;
+            //vm.event.newParticipant = participant;
+            console.log("here");
+            EventService
+                .updateEventById(vm.event._id, vm.event)
+                .then(function (response) {
+                    vm.errormessage = null;
+                    vm.successMessage = "Response saved successfully";
+                    init();
                 });
 
+
+        }
+
+        function error(participant, date) {
+            vm.successMessage=null;
+            if (!participant) {
+                vm.errormessage = "Please enter Name";
+                return;
+            }
+
+            if (!date) {
+                vm.errormessage = "Please select Date";
+                return;
+            }
+            $('#myModal2').modal('show');
+
+        }
+
+        function cannot(participant){
+            if (!participant) {
+                vm.errormessage = "Please enter Name";
+                return;
+            }
+            vm.event.nonParticipants.push(participant);
+            EventService.updateEventById(vm.event._id, vm.event)
+                .then(function (response) {
+                    vm.errormessage = null;
+                    vm.successMessage = "Response saved successfully";
+                    init();
+                });
+        }
     }
 })();

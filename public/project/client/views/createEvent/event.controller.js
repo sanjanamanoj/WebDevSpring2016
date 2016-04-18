@@ -11,6 +11,10 @@
         vm.cu=null;
         vm.e=null;
         vm.errormessage=null;
+        window.onbeforeunload = function(e) {
+            $location.url('/event');
+            return 'Your Poll is not yet saved..';
+         };
         function init() {
 
         }
@@ -26,14 +30,6 @@
                 vm.errormessage="Enter the event title";
                 return;
             }
-            if(!event.address){
-                vm.errormessage="Enter the event location";
-                return;
-            }
-            if(!event.description){
-                vm.errormessage="Enter the event description";
-                return;
-            }
             if(!event.name){
                 vm.errormessage="Enter your name";
                 return;
@@ -42,15 +38,34 @@
                 vm.errormessage="Enter your email";
                 return;
             }
-            $rootScope.event=
+            if(!$rootScope.event) {
+                $rootScope.event=null;
+                $rootScope.event =
                 {
-                    "id":"",
+                    "id": "",
                     "title": event.title,
                     "address": event.address,
                     "description": event.description,
                     "name": event.name,
                     "email": event.email
                 };
+            }
+            if(!$rootScope.selectedDates) {
+                $rootScope.selectedDates = [];
+                //$rootScope.event.schedule = [];
+            }
+            console.log($rootScope.event);
+
+            if(!$rootScope.event.schedule) {
+                console.log("go no");
+                $rootScope.event.schedule = [];
+            }
+            else{
+                console.log("go");
+            }
+
+
+
 
              $location.url("/dateProposal");
         }

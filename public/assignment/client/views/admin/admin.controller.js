@@ -55,10 +55,12 @@
         }
 
         function handleSuccess(response) {
+
             for(var i in response.data) {
                 response.data[i].roles = response.data[i].roles.toString();
             }
             vm.users = response.data;
+
         }
 
         function handleError(error) {

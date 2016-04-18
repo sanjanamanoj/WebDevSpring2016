@@ -1,5 +1,4 @@
 var passport      = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 
@@ -8,36 +7,41 @@ module.exports = function(app, userModel) {
     var auth = authorized;
     app.post('/api/project/login', login);
     app.post('/api/project/logout', logout);
-    app.post('/api/project/register', register);
-    app.post('/api/project/user', auth, createUser);
+    app.post('/api/project/register', createUser);
+    app.post('/api/project/user', createUser);
     app.get('/api/project/loggedin', loggedin);
-    app.get('/api/project/user', auth, findAllUsers);
-    app.put('/api/project/user/:id', auth, updateUser);
-    app.delete('/api/project/user/:id', auth, deleteUser);
+    app.get('/api/project/user', findAllUsers);
+    app.put('/api/project/user/:id', updateUser);
+    app.delete('/api/project/user/:id', deleteUser);
 
+
+//    app.get   ('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
     app.get   ('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
     app.get('/auth/facebook/callback',
         passport.authenticate('facebook', {
-            successRedirect: '/#/profile',
-            failureRedirect: '/#/login'
-        }));
+            successRedirect: '/project/client/#/profile',
+            failureRedirect: '/project/client/#/login'
+        }), function(req, res){
+            console.log('/auth/facebook/callback');
+            res.send(200);
+        });
 
     app.get   ('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
     app.get   ('/auth/google/callback',
         passport.authenticate('google', {
-                successRedirect: '/#/profile',
-                failureRedirect: '/#/login'
+                successRedirect: '/project/client/#/profile',
+                failureRedirect: '/project/client/#/login'
            }));
 
        var googleConfig = {
             clientID        : "318409769806-83d5avokaoh52o4ot3rgirdsp5g2fi16.apps.googleusercontent.com",
             clientSecret    : "TaBmTNEe1IxtFqRhSPbpkwXk",
-            callbackURL     : "http://127.0.0.1:3000/project/client"
+            callbackURL     : "http://127.0.0.1:3000/auth/google/callback"
         };
     var facebookConfig = {
-        clientID        : "abc",
-        clientSecret    : process.env.FACEBOOK_CLIENT_SECRET,
-        callbackURL     : process.env.FACEBOOK_CALLBACK_URL
+        clientID        : "1595960087361230",
+        clientSecret    : "4062899a78e33b5ce2cde9cea4f8a429",
+        callbackURL     : "http://127.0.0.1:3000/auth/facebook/callback"
     };
     passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
     passport.use(new GoogleStrategy(googleConfig, googleStrategy));
@@ -55,8 +59,7 @@ module.exports = function(app, userModel) {
                     } else {
                         var names = profile.displayName.split(" ");
                         var newFacebookUser = {
-                            lastName:  names[1],
-                            firstName: names[0],
+                            name:  names[0]+" "+names[1],
                             email:     profile.emails ? profile.emails[0].value:"",
                             facebook: {
                                 id:    profile.id,
@@ -90,8 +93,8 @@ module.exports = function(app, userModel) {
                         return done(null, user);
                     } else {
                         var newGoogleUser = {
-                            lastName: profile.name.familyName,
-                            name: profile.name.givenName,
+                            //lastName: profile.name.familyName,
+                            name: profile.name.givenName + profile.name.familyName,
                             email: profile.emails[0].value,
                             google: {
                                 id:          profile.id,
@@ -99,6 +102,7 @@ module.exports = function(app, userModel) {
                             }
                         };
                         return userModel.createUser(newGoogleUser);
+
                     }
                 },
                 function(err) {
@@ -107,6 +111,8 @@ module.exports = function(app, userModel) {
             )
             .then(
                 function(user){
+                    //console
+                    //req.session.currentUser = user;
                     return done(null, user);
                 },
                 function(err){
@@ -134,162 +140,112 @@ module.exports = function(app, userModel) {
             );
     }
 
-
-    function login(req, res) {
-        var user = req.user;
-        console.log(user);
-        res.json(user);
+    function findUserById(req, res)
+    {
+        var userId = req.params.id;
+        var user = userModel.findUserById(userId)
+            .then(
+                function(doc){
+                    res.json(doc);
+                },
+                function(err){
+                    res.status(400).send(err);
+                }
+            )
     }
 
-    function loggedin(req, res) {
-        res.send(req.isAuthenticated() ? req.user : '0');
+
+
+    function login(req, res)
+    {
+        var credentials= req.body;
+        var user = userModel.findUserByCredentials(credentials)
+            .then(
+                function(doc){
+                    req.session.currentUser = doc;
+                    res.json(doc);
+                },
+                function(err){
+                    res.status(400).send(err);
+                }
+            );
     }
 
-    function logout(req, res) {
-        req.logOut();
+
+    function logout(req,res){
+        req.session.destroy();
         res.send(200);
     }
 
-    function register(req, res) {
-        var newUser = req.body;
+    function loggedin(req,res){
+        res.json(req.session.currentUser);
+    }
 
 
-        userModel
-            .findUserByEmail(newUser.email)
+
+
+    function findAllUsers(req,res)
+    {
+        var users= userModel.findAllUsers()
             .then(
-                function (user) {
-                    if (user) {
-                        res.json(null);
-                    } else {
-                        return userModel.createUser(newUser);
-                    }
+                function(doc){
+                    res.json(doc);
                 },
-                function (err) {
-                    res.status(400).send(err);
-                }
-            )
-            .then(
-                function (user) {
-                    if (user) {
-                        req.login(user, function (err) {
-                            if (err) {
-                                res.status(400).send(err);
-                            } else {
-                                res.json(user);
-                            }
-                        });
-                    }
-                },
-                function (err) {
+                function(err){
                     res.status(400).send(err);
                 }
             );
-    }
-
-    function findAllUsers(req, res) {
-        if (isAdmin(req.user)) {
-            userModel
-                .findAllUsers()
-                .then(
-                    function (users) {
-                        res.json(users);
-                    },
-                    function () {
-                        res.status(400).send(err);
-                    }
-                );
-        } else {
-            res.status(403);
-        }
     }
 
     function deleteUser(req, res) {
-        if (isAdmin(req.user)) {
-
-            userModel
-                .removeUser(req.params.id)
-                .then(
-                    function (user) {
-                        return userModel.findAllUsers();
-                    },
-                    function (err) {
-                        res.status(400).send(err);
-                    }
-                )
-                .then(
-                    function (users) {
-                        res.json(users);
-                    },
-                    function (err) {
-                        res.status(400).send(err);
-                    }
-                );
-        } else {
-            res.status(403);
-        }
-    }
-
-    function updateUser(req, res) {
-        var newUser = req.body;
-
-        userModel
-            .updateUser(req.params.id, newUser)
+        var id = req.params.id;
+        (userModel.deleteUserById(id))
             .then(
-                function (user) {
-                    return userModel.findAllUsers();
+                function(doc){
+                    res.json(doc);
                 },
-                function (err) {
-                    res.status(400).send(err);
-                }
-            )
-            .then(
-                function (users) {
-                    res.json(users);
-                },
-                function (err) {
+                function(err){
                     res.status(400).send(err);
                 }
             );
     }
 
-    function createUser(req, res) {
-        var newUser = req.body;
 
-        // first check if a user already exists with the username
-        userModel
-            .findUserByUsername(newUser.username)
+
+
+    function updateUser(req, res) {
+        var user = req.body;
+        var userId = req.params.id;
+        userModel.updateUser(userId, user)
             .then(
-                function (user) {
-                    // if the user does not already exist
-                    if (user == null) {
-                        // create a new user
-                        return userModel.createUser(newUser)
-                            .then(
-                                // fetch all the users
-                                function () {
-                                    return userModel.findAllUsers();
-                                },
-                                function (err) {
-                                    res.status(400).send(err);
-                                }
-                            );
-                        // if the user already exists, then just fetch all the users
-                    } else {
-                        return userModel.findAllUsers();
-                    }
+                function(doc)
+                {
+                    req.session.currentUser = req.body;
+                    res.json(doc);
                 },
-                function (err) {
+                function(err){
                     res.status(400).send(err);
                 }
-            )
+            );
+    }
+
+
+    function createUser(req,res)
+    {
+        var newUser = req.body;
+        console.log("call");
+        var user = userModel.createUser(newUser)
             .then(
-                function (users) {
-                    res.json(users);
+                function(doc){
+                    console.log("Helooooooo");
+                    req.session.currentUser = doc;
+                    res.json(doc);
                 },
-                function () {
+                function(err){
+                    console.log("nooooooo");
                     res.status(400).send(err);
                 }
-            )
+            );
     }
 
     function authorized(req, res, next) {

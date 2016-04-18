@@ -3,33 +3,33 @@
     <h2 class="sub-header">Users</h2><br>
     <table class="table table-striped">
         <thead>
-        <tr>
-            <th ng-click="model.sortField='username'; model.order= !model.order">
+        <tr >
+            <th  ng-click="model.sortField='username'; model.order= !model.order">
                 <span  ng-show="model.sortField=='username' && !model.order" class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
                 <span  ng-show="model.sortField=='username' && model.order" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
                 Username
             </th>
-            <th> <span  aria-hidden="true"></span> Password </th>
+            <th >  Password </th>
             <th ng-click="model.sortField='firstName'; model.order= !model.order">
                 <span  ng-show="model.sortField=='firstName' && !model.order" class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
                 <span  ng-show="model.sortField=='firstName' && model.order" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
                 First Name
             </th>
-            <th ng-click="model.sortField='lastName'; model.order= !model.order">
+            <th  ng-click="model.sortField='lastName'; model.order= !model.order">
                 <span  ng-show="model.sortField=='lastName' && !model.order" class="glyphicon glyphicon-triangle-top" aria-hidden="true"></span>
                 <span  ng-show="model.sortField=='lastName' && model.order" class="glyphicon glyphicon-triangle-bottom" aria-hidden="true"></span>
                 Last Name
             </th>
-            <th> <span  aria-hidden="true"></span> Role </th>
-            <th> <span  aria-hidden="true"></span> Action </th>
+            <th >  Role </th>
+            <th > Action </th>
         </tr>
-        <tr>
-            <th> <input ng-model="model.user.username" type="text" class="form-control" placeholder="Username"> </th>
-            <th> <input ng-model="model.user.password" type="password" class="form-control" placeholder="Password"> </th>
-            <th> <input ng-model="model.user.firstName" type="text" class="form-control" placeholder="First Name"> </th>
+        <tr >
+            <th > <input ng-model="model.user.username" type="text" class="form-control col-sm-2" placeholder="Username"> </th>
+            <th > <input ng-model="model.user.password" type="password" class="form-control col-sm-2" placeholder="Password"> </th>
+            <th > <input ng-model="model.user.firstName" type="text" class="form-control" placeholder="First Name"> </th>
             <th> <input ng-model="model.user.lastName" type="text" class="form-control" placeholder="Last Name"> </th>
-            <th> <input ng-model="model.user.roles" type="text" class="form-control" placeholder="Role1, Role2"> </th>
-             <th> <span ng-click="model.add(model.user)" class="glyphicon glyphicon-plus btn btn-success" aria-hidden="true"></span>
+            <th > <input ng-model="model.user.roles" type="text" class="form-control" placeholder="Role1, Role2"> </th>
+             <th > <span ng-click="model.add(model.user)" class="glyphicon glyphicon-plus btn btn-success" aria-hidden="true"></span>
             <span ng-click="model.update(model.user)" class="glyphicon glyphicon-ok btn btn-primary"  aria-hidden="true"></span>
         </th>
         </tr>
@@ -37,7 +37,7 @@
         <tbody>
         <tr ng-repeat = "user in model.users | orderBy:model.sortField:model.order">
             <td> {{user.username}}</td>
-            <td> {{user.password}}</td>
+            <td> </td>
             <td> {{user.firstName}}</td>
             <td> {{user.lastName}}</td>
             <td> {{user.roles}}</td>

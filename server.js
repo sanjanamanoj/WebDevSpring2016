@@ -6,6 +6,9 @@ var cookieParser  = require('cookie-parser');
 var multer = require('multer');
 var passport = require('passport');
 var uuid = require('node-uuid');
+var nodemailer = require('nodemailer');
+
+var router = express.Router();
 // install and require the mongoose library
 var mongoose      = require('mongoose');
 
@@ -44,7 +47,12 @@ app.get('/env', function(req, res){
     res.json(process.env);
 });
 
+//router.get("/");
+//router.post("/send",function(req,res,next){
+
+//});
+
 require("./public/assignment/server/app.js")(app, db, mongoose);
-require("./public/project/server/app.js")(app,db,mongoose);
+require("./public/project/server/app.js")(app,db,mongoose,uuid);
 
 app.listen(port, ipaddress);

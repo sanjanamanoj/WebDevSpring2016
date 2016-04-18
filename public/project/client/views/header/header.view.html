@@ -1,4 +1,5 @@
-<nav id="nav1" class="navbar navbar-default" ng-controller="HeaderController">
+<div class="navbar">
+<div id="nav1" class="navbar-default navbar-fixed-top" ng-controller="HeaderController">
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -7,18 +8,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/home" style="font-family: fantasy;font-size: 25px"><strong>Just In Time</strong></a>
+            <a class="navbar-brand" href="#/home" style="font-family: fantasy;font-size: 25px">Just In Time</a>
         </div>
 
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
-            <ul class="nav navbar-nav navbar-right">
-
-                <li ng-style="aboutStyle">
-                    <a href="#/about">
-                        About
-                    </a>
-                </li>
+            <ul class="nav navbar-nav navbar-right" style="font-size: medium">
 
                 <li ng-hide="currentUser">
                     <a data-toggle="modal" data-target="#dialog" href="#/login">
@@ -55,4 +50,5 @@
             </ul>
         </div>
     </div>
-</nav>
+</div>
+</div>

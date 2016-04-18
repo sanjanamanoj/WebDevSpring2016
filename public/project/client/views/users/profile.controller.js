@@ -8,7 +8,9 @@
     function ProfileController($location, UserService) {
         var vm = this;
         vm.update = update;
+        vm.message="";
         vm.cu=null;
+        window.onbeforeunload=null;
         function init() {
             vm.cu = UserService.getCurrentUser();
             console.log(vm.cu);
@@ -19,12 +21,13 @@
         return init();
 
         function update(user) {
+            console.log(vm.cu);
             UserService
-                .updateUser(vm.cu._id,user)
+                .updateUser(user._id,user)
                 .then(function(response){
                     if(response.data) {
-                        UserService.setCurrentUser(response.data);
-                        $location.url("/profile");
+                        UserService.setCurrentUser(user);
+                        vm.message= "Updated Successfully!";
                     }
                 });
         }
