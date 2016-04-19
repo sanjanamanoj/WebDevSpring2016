@@ -39,8 +39,8 @@ module.exports = function(app, userModel) {
             callbackURL     : "http://127.0.0.1:3000/auth/google/callback"
         };
     var facebookConfig = {
-        clientID        : "1595960087361230",
-        clientSecret    : "4062899a78e33b5ce2cde9cea4f8a429",
+        clientID        : "164436443950632",
+        clientSecret    : "3ed9c339070979b44850d41ac504f11b",
         callbackURL     : "http://127.0.0.1:3000/auth/facebook/callback"
     };
     passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
@@ -178,7 +178,7 @@ module.exports = function(app, userModel) {
     }
 
     function loggedin(req,res){
-        res.json(req.session.currentUser);
+        res.send(req.isAuthenticated() ? req.user : '0');
     }
 
 

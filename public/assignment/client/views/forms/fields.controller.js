@@ -138,7 +138,11 @@
 
 
         function addField(fieldType) {
-            var field = {"label": translateLabel(fieldType), "type": translateFieldType(fieldType), "placeholder": translatePlaceholder(fieldType), "options": translateOptions(fieldType)};
+            var field =
+                {"label": translateLabel(fieldType),
+                "type": translateFieldType(fieldType),
+                "placeholder": translatePlaceholder(fieldType),
+                "options": translateOptions(fieldType)};
             FieldService
                 .createField(formId, field)
                 .then(init);

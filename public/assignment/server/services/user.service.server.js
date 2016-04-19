@@ -85,7 +85,10 @@ module.exports = function(app, userModel) {
         var newUser = req.body;
         //console.log(newUser);
         newUser.roles = ['student'];
-        newUser.emails =newUser.emails.split(",");
+        console.log(newUser);
+        //var emails=newUser.emails.split(",");
+        //newUser.emails =emails;
+
         for(var i in newUser.emails){
             newUser.emails[i]=newUser.emails[i].trim();
         }
