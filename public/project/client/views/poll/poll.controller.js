@@ -34,8 +34,9 @@
                         vm.event = response.data;
                         vm.hiddenPoll = response.data.hidden;
                         vm.closePoll=response.data.closePoll;
-                        if(vm.closePoll)
-                        vm.pollmessage="Sorry this poll is closed";
+                        if(vm.closePoll) {
+                            vm.pollmessage = "Sorry, this poll is closed";
+                        }
                         console.log(vm.event.limitNumber);
                         if (vm.event.limit) {
                             var flag = false;
@@ -68,16 +69,16 @@
             vm.times = [];
             for (var i in vm.event.schedule) {
                 if (Date.parse(date) == Date.parse(vm.event.schedule[i].date)) {
+                    //console.log("atat");
                     for (var j in vm.event.schedule[i].times) {
                         if (vm.event.limit) {
                             if (vm.event.schedule[i].times[j].participants.length < vm.event.limitNumber) {
                                 vm.times.push(vm.event.schedule[i].times[j].time);
-
                             }
                         }
                         else {
                             vm.times.push(vm.event.schedule[i].times[j].time);
-                            console.log(new Date(vm.event.schedule[i].times[j].time).toString().substr(16, 8));
+                            //console.log(new Date(vm.event.schedule[i].times[j].time).toString().substr(16, 8));
                         }
                     }
                 }
@@ -87,15 +88,12 @@
 
         function save(participant, date, time) {
             console.log(time);
-            // vm.newParticipant = null;
-            //console.log(date);
-
 
             for (var i in vm.event.schedule) {
                 if (Date.parse(date) == Date.parse(vm.event.schedule[i].date)) {
                     console.log("date matches");
                     for (var j in vm.event.schedule[i].times) {
-                        if (time == new Date(vm.event.schedule[i].times[j].time).toString().substr(16, 8)) {
+                        if (time == vm.event.schedule[i].times[j].time) {
                             console.log("time matches");
                             vm.event.schedule[i].times[j].participants.push(participant);
                         }
@@ -117,7 +115,7 @@
 
         }
 
-        function error(participant, date) {
+        function error(participant, date,time) {
             vm.successMessage=null;
             if (!participant) {
                 vm.errormessage = "Please enter Name";
@@ -126,6 +124,10 @@
 
             if (!date) {
                 vm.errormessage = "Please select Date";
+                return;
+            }
+            if (!time) {
+                vm.errormessage = "Please select a time slot";
                 return;
             }
             $('#myModal2').modal('show');

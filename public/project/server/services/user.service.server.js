@@ -233,19 +233,31 @@ module.exports = function(app, userModel) {
     function createUser(req,res)
     {
         var newUser = req.body;
-        console.log("call");
-        var user = userModel.createUser(newUser)
-            .then(
-                function(doc){
-                    console.log("Helooooooo");
-                    req.session.currentUser = doc;
-                    res.json(doc);
-                },
+        //console.log("call");
+        userModel.findUserByEmail(newUser.email)
+            .then(function(user){
+                if(!user){
+                    console.log("gonna create");
+                    userModel.createUser(newUser)
+                        .then(
+                            function(doc){
+                                req.session.currentUser = doc;
+                                res.json(doc);
+                            },
+                            function(err){
+                                res.status(400).send(err);
+                            }
+                        );
+                }
+            else{
+                    console.log("user exists");
+                    res.json(null);
+                }},
                 function(err){
-                    console.log("nooooooo");
+
                     res.status(400).send(err);
                 }
-            );
+            )
     }
 
     function authorized(req, res, next) {
