@@ -29,7 +29,7 @@
                     });
         }
         init();
-        vm.participationLink="http://webdev2016-mardikaratindra.rhcloud.com/project/client/#/event/" + vm.eventId + "/poll";
+        vm.participationLink="http://webdev2016-manojsanjana.rhcloud.com/project/client/#/event/" + vm.eventId + "/poll";
 
         function closePoll(){
             vm.event.closePoll=!vm.event.closePoll;
@@ -123,7 +123,7 @@
                     "Event Title: " + vm.event.title +
                     "\nEvent Location: " + vm.event.address +
                     "\nParticipation link:\n" +
-                    "http://webdev2016-mardikaratindra.rhcloud.com/project/client/#/event/" + vm.event._id + "/poll"
+                    "http://webdev2016-manojsanjana.rhcloud.com/project/client/#/event/" + vm.event._id + "/poll"
                 };
                 EventService.sendMail(mailOptions)
                     .then(function (response) {
@@ -147,7 +147,7 @@
                     "Event Title: " + vm.event.title +
                     "\nEvent Location: " + vm.event.address +
                     "\nParticipation link:\n" +
-                    "http://webdev2016-mardikaratindra.rhcloud.com/project/client/#/event/" + vm.event._id + "/poll"
+                    "http://webdev2016-manojsanjana.rhcloud.com/project/client/#/event/" + vm.event._id + "/poll"
                 };
                 EventService.sendMail(mailOptions)
                     .then(function (response) {
