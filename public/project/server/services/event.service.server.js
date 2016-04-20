@@ -133,10 +133,17 @@ module.exports = function(app, eventModel,uuid) {
         console.log("calling server");
         var id = req.params.eventId;
         var event = req.body;
-        eventModel.updateEvent(id, event)
+        eventModel.deleteEventById(id)
             .then(
                 function(doc){
-                    res.json(doc);
+                    eventModel.createEvent(event)
+                        .then(
+                            function(doc){
+                                res.json(doc);
+                            },
+                            function(err){
+                                res.status(400).send(err);
+                            });
                 },
                 function(err){
                     res.status(400).send(err);
