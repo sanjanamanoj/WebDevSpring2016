@@ -1,5 +1,7 @@
 var passport      = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 
 module.exports = function(app, userModel) {
 
@@ -17,6 +19,36 @@ module.exports = function(app, userModel) {
     passport.serializeUser(serializeUser);
     passport.deserializeUser(deserializeUser);
 
+
+    app.get   ('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    app.get('/auth/facebook/callback',
+        passport.authenticate('facebook', {
+            successRedirect: '/project/client/#/profile',
+            failureRedirect: '/project/client/#/login'
+        }), function(req, res){
+            console.log("hereee");
+            res.send(200);
+        });
+
+    app.get   ('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+    app.get   ('/auth/google/callback',
+        passport.authenticate('google', {
+            successRedirect: '/project/client/#/profile',
+            failureRedirect: '/project/client/#/login'
+        }));
+
+    var googleConfig = {
+        clientID        : "318409769806-83d5avokaoh52o4ot3rgirdsp5g2fi16.apps.googleusercontent.com",
+        clientSecret    : "TaBmTNEe1IxtFqRhSPbpkwXk",
+        callbackURL     : "http://127.0.0.1:3000/auth/google/callback"
+    };
+    var facebookConfig = {
+        clientID        : "164436443950632",
+        clientSecret    : "bed7d0b32ebf6104dacd3930247250f9",
+        callbackURL     : "http://127.0.0.1:3000/auth/facebook/callback"
+    };
+    passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
+    passport.use(new GoogleStrategy(googleConfig, googleStrategy));
 
     function localStrategy(username, password, done) {
         userModel
@@ -38,6 +70,82 @@ module.exports = function(app, userModel) {
 
 
 
+    function facebookStrategy(token, refreshToken, profile, done) {
+        userModel
+            .findUserByFacebookId(profile.id)
+            .then(
+                function(user) {
+                    if(user) {
+                        console.log(user);
+                        return done(null, user);
+                    } else {
+                        var names = profile.displayName.split(" ");
+                        var newFacebookUser = {
+                            name:  names[0]+" "+names[1],
+                            email:     profile.emails ? profile.emails[0].value:"",
+                            facebook: {
+                                id:    profile.id,
+                                token: token
+                            }
+                        };
+                        console.log(newFacebookUser);
+                        return userModel.createUser(newFacebookUser);
+                    }
+                },
+                function(err) {
+                    if (err) { return done(err); }
+                }
+            )
+            .then(
+                function(user){
+                    return done(null, user);
+                },
+                function(err){
+                    if (err) { return done(err); }
+                }
+            );
+    }
+
+
+    function googleStrategy(token, refreshToken, profile, done) {
+        userModel
+            .findUserByGoogleId(profile.id)
+            .then(
+                function(user) {
+                    if(user) {
+                        //console.log(user);
+                        return done(null, user);
+                    } else {
+                        console.log(profile.name.givenName + profile.name.familyName);
+                        console.log(profile.emails[0].value);
+                        var newGoogleUser = {
+                            //lastName: profile.name.familyName,
+                            name: profile.name.givenName + " "+profile.name.familyName,
+                            email: profile.emails[0].value,
+                            google: {
+                                id:          profile.id,
+                                token:       token
+                            }
+                        };
+                        return userModel.createUser(newGoogleUser);
+
+                    }
+                },
+                function(err) {
+                    if (err) { return done(err); }
+                }
+            )
+            .then(
+                function(user){
+                    //console
+                    //req.session.currentUser = user;
+                    return done(null, user);
+                },
+                function(err){
+                    if (err) { return done(err); }
+                }
+            );
+    }
 
     function serializeUser(user, done) {
         done(null, user);
