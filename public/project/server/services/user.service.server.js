@@ -40,12 +40,12 @@ module.exports = function(app, userModel) {
     var googleConfig = {
         clientID        : "318409769806-83d5avokaoh52o4ot3rgirdsp5g2fi16.apps.googleusercontent.com",
         clientSecret    : "TaBmTNEe1IxtFqRhSPbpkwXk",
-        callbackURL     : "webdev2016-manojsanjana.rhcloud.com/auth/google/callback"
+        callbackURL     : "http://webdev2016-manojsanjana.rhcloud.com/auth/google/callback"
     };
     var facebookConfig = {
         clientID        : "164436443950632",
         clientSecret    : "bed7d0b32ebf6104dacd3930247250f9",
-        callbackURL     : "webdev2016-manojsanjana.rhcloud.com/auth/facebook/callback"
+        callbackURL     : "http://webdev2016-manojsanjana.rhcloud.com/auth/facebook/callback"
     };
     passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
     passport.use(new GoogleStrategy(googleConfig, googleStrategy));
