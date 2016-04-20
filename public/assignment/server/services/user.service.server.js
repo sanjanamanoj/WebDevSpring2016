@@ -1,12 +1,10 @@
-var passport      = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var bcrypt = require("bcrypt-nodejs");
+
 
 module.exports = function(app, userModel) {
-
+/*
     var auth = authorized;
     var user;
-    app.post('/api/assignment/login',      passport.authenticate('local'), login);
+
     app.get('/api/assignment/loggedin',                                    loggedin);
     app.post('/api/assignment/logout',                                     logout);
     app.post('/api/assignment/register',                                   register);
@@ -19,30 +17,7 @@ module.exports = function(app, userModel) {
     app.put('/api/assignment/admin/user/:id',    isAdmin,                  updateUser);
 
 
-    passport.use(new LocalStrategy(localStrategy));
-    passport.serializeUser(serializeUser);
-    passport.deserializeUser(deserializeUser);
 
-
-    function localStrategy(username, password, done) {
-        //console.log(username);
-        userModel
-            .findUserByUsername(username)
-            .then(
-                function (user) {
-                    //console.log(user);
-                    if (user && bcrypt.compareSync(password, user.password)) {
-                        return done(null, user);
-                    }
-                    return done(null, false);
-                },
-                function (err) {
-                    if (err) {
-                        return done(err);
-                    }
-                }
-            );
-    }
 
     function serializeUser(user, done) {
         delete user.password;
@@ -128,38 +103,38 @@ module.exports = function(app, userModel) {
     }
 
     function findAllUsers(req, res) {
-            userModel
-                .findAllUsers()
-                .then(
-                    function (users) {
-                        res.json(users);
-                    },
-                    function () {
-                        res.status(400).send(err);
-                    }
-                );
+        userModel
+            .findAllUsers()
+            .then(
+                function (users) {
+                    res.json(users);
+                },
+                function () {
+                    res.status(400).send(err);
+                }
+            );
 
     }
 
     function deleteUser(req, res) {
-            userModel
-                .deleteUserById(req.params.id)
-                .then(
-                    function (user) {
-                        return userModel.findAllUsers();
-                    },
-                    function (err) {
-                        res.status(400).send(err);
-                    }
-                )
-                .then(
-                    function (users) {
-                        res.json(users);
-                    },
-                    function (err) {
-                        res.status(400).send(err);
-                    }
-                );
+        userModel
+            .deleteUserById(req.params.id)
+            .then(
+                function (user) {
+                    return userModel.findAllUsers();
+                },
+                function (err) {
+                    res.status(400).send(err);
+                }
+            )
+            .then(
+                function (users) {
+                    res.json(users);
+                },
+                function (err) {
+                    res.status(400).send(err);
+                }
+            );
     }
 
     function updateUser(req, res) {
@@ -261,10 +236,10 @@ module.exports = function(app, userModel) {
                 next();
             }
 
-        else {
-            res.send(403);
-        }
-    }}
+            else {
+                res.send(403);
+            }
+        }}
 
     function findUserByUsername(req, res) {
         var username = req.query.username;
@@ -287,7 +262,7 @@ module.exports = function(app, userModel) {
         } else {
             next();
         }
-    }
+    }*/
 };
 
 

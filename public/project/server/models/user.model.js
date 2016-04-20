@@ -9,6 +9,7 @@ module.exports = function(db, mongoose) {
     var api = {
         findUserByCredentials: findUserByCredentials,
         findAllUsers: findAllUsers,
+        findUserById: findUserById,
         createUser: createUser,
         deleteUserById: deleteUserById,
         updateUser:updateUser,
@@ -76,6 +77,7 @@ module.exports = function(db, mongoose) {
                 deferred.reject(err);
             }
             else{
+                console.log("creating");
                 deferred.resolve(doc);
             }
         });
@@ -95,6 +97,18 @@ module.exports = function(db, mongoose) {
         return deferred.promise;
     }
 
+    function findUserById(id) {
+        var deferred = q.defer();
+        UserModel.findById(id, function (err, doc) {
+            if (err) {
+                deferred.reject(err);
+            }
+            else {
+                deferred.resolve(doc);
+            }
+        });
+        return deferred.promise;
+    }
 
 
     function updateUser(id,user){

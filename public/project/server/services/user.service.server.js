@@ -1,125 +1,41 @@
 var passport      = require('passport');
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-var FacebookStrategy = require('passport-facebook').Strategy;
+var LocalStrategy = require('passport-local').Strategy;
 
 module.exports = function(app, userModel) {
 
     var auth = authorized;
-    app.post('/api/project/login', login);
+    app.post('/api/project/login',      passport.authenticate('local'), login);
+    app.get('/api/project/check', checkloggedin);
     app.post('/api/project/logout', logout);
-    app.post('/api/project/register', createUser);
+    app.post('/api/project/register', register);
     app.post('/api/project/user', createUser);
-    app.get('/api/project/loggedin', loggedin);
     app.get('/api/project/user', findAllUsers);
     app.put('/api/project/user/:id', updateUser);
     app.delete('/api/project/user/:id', deleteUser);
 
-
-//    app.get   ('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-    app.get   ('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-    app.get('/auth/facebook/callback',
-        passport.authenticate('facebook', {
-            successRedirect: '/project/client/#/profile',
-            failureRedirect: '/project/client/#/login'
-        }), function(req, res){
-            console.log('/auth/facebook/callback');
-            res.send(200);
-        });
-
-    app.get   ('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-    app.get   ('/auth/google/callback',
-        passport.authenticate('google', {
-                successRedirect: '/project/client/#/profile',
-                failureRedirect: '/project/client/#/login'
-           }));
-
-       var googleConfig = {
-            clientID        : "318409769806-83d5avokaoh52o4ot3rgirdsp5g2fi16.apps.googleusercontent.com",
-            clientSecret    : "TaBmTNEe1IxtFqRhSPbpkwXk",
-            callbackURL     : "http://127.0.0.1:3000/auth/google/callback"
-        };
-    var facebookConfig = {
-        clientID        : "164436443950632",
-        clientSecret    : "3ed9c339070979b44850d41ac504f11b",
-        callbackURL     : "http://127.0.0.1:3000/auth/facebook/callback"
-    };
-    passport.use(new FacebookStrategy(facebookConfig, facebookStrategy));
-    passport.use(new GoogleStrategy(googleConfig, googleStrategy));
-
+    passport.use(new LocalStrategy({usernameField: 'email', passwordField: 'password'},localStrategy));
     passport.serializeUser(serializeUser);
     passport.deserializeUser(deserializeUser);
 
-    function facebookStrategy(token, refreshToken, profile, done) {
+
+    function localStrategy(username, password, done) {
         userModel
-            .findUserByFacebookId(profile.id)
+            .findUserByCredentials({email: username, password: password})
             .then(
-                function(user) {
-                    if(user) {
-                        return done(null, user);
-                    } else {
-                        var names = profile.displayName.split(" ");
-                        var newFacebookUser = {
-                            name:  names[0]+" "+names[1],
-                            email:     profile.emails ? profile.emails[0].value:"",
-                            facebook: {
-                                id:    profile.id,
-                                token: token
-                            }
-                        };
-                        return userModel.createUser(newFacebookUser);
+                function (user) {
+                    if (!user) {
+                        return done(null, false);
                     }
-                },
-                function(err) {
-                    if (err) { return done(err); }
-                }
-            )
-            .then(
-                function(user){
                     return done(null, user);
                 },
-                function(err){
-                    if (err) { return done(err); }
+                function (err) {
+                    if (err) {
+                        return done(err);
+                    }
                 }
             );
     }
 
-
-    function googleStrategy(token, refreshToken, profile, done) {
-        userModel
-            .findUserByGoogleId(profile.id)
-            .then(
-                function(user) {
-                    if(user) {
-                        return done(null, user);
-                    } else {
-                        var newGoogleUser = {
-                            //lastName: profile.name.familyName,
-                            name: profile.name.givenName + profile.name.familyName,
-                            email: profile.emails[0].value,
-                            google: {
-                                id:          profile.id,
-                                token:       token
-                            }
-                        };
-                        return userModel.createUser(newGoogleUser);
-
-                    }
-                },
-                function(err) {
-                    if (err) { return done(err); }
-                }
-            )
-            .then(
-                function(user){
-                    //console
-                    //req.session.currentUser = user;
-                    return done(null, user);
-                },
-                function(err){
-                    if (err) { return done(err); }
-                }
-            );
-    }
 
 
 
@@ -155,32 +71,56 @@ module.exports = function(app, userModel) {
     }
 
 
+    function register(req, res) {
+        var newUser = req.body;
 
-    function login(req, res)
-    {
-        var credentials= req.body;
-        var user = userModel.findUserByCredentials(credentials)
+        userModel
+            .findUserByEmail(newUser.email)
             .then(
-                function(doc){
-                    req.session.currentUser = doc;
-                    res.json(doc);
+                function (user) {
+                    if (user) {
+                        res.json(null);
+                    } else {
+                        return userModel.createUser(newUser);
+                    }
                 },
-                function(err){
+                function (err) {
+                    res.status(400).send(err);
+                }
+            )
+            .then(
+                function (user) {
+                    if (user) {
+                        req.login(user, function (err) {
+                            if (err) {
+                                res.status(400).send(err);
+                            } else {
+                                res.json(user);
+                            }
+                        });
+                    }
+                },
+                function (err) {
                     res.status(400).send(err);
                 }
             );
     }
 
 
-    function logout(req,res){
-        req.session.destroy();
-        res.send(200);
+    function login(req, res) {
+        var user = req.user;
+        res.json(user);
     }
 
-    function loggedin(req,res){
+    function checkloggedin(req, res){
+        console.log(req.user);
         res.send(req.isAuthenticated() ? req.user : '0');
     }
 
+    function logout(req, res) {
+        req.logOut();
+        res.send(200);
+    }
 
 
 
@@ -212,6 +152,46 @@ module.exports = function(app, userModel) {
 
 
 
+    function createUser(req, res) {
+        var newUser = req.body;
+
+
+        // first check if a user already exists with the username
+        userModel
+            .findUserByEmail(newUser.email)
+            .then(
+                function (user) {
+                    // if the user does not already exist
+                    if (user == null) {
+                        // create a new user
+                        return userModel.createUser(newUser)
+                            .then(
+                                // fetch all the users
+                                function () {
+                                    return userModel.findAllUsers();
+                                },
+                                function (err) {
+                                    res.status(400).send(err);
+                                }
+                            );
+                        // if the user already exists, then just fetch all the users
+                    } else {
+                        return userModel.findAllUsers();
+                    }
+                },
+                function (err) {
+                    res.status(400).send(err);
+                }
+            )
+            .then(
+                function (users) {
+                    res.json(users);
+                },
+                function () {
+                    res.status(400).send(err);
+                }
+            )
+    }
 
     function updateUser(req, res) {
         var user = req.body;
@@ -230,35 +210,7 @@ module.exports = function(app, userModel) {
     }
 
 
-    function createUser(req,res)
-    {
-        var newUser = req.body;
-        //console.log("call");
-        userModel.findUserByEmail(newUser.email)
-            .then(function(user){
-                if(!user){
-                    console.log("gonna create");
-                    userModel.createUser(newUser)
-                        .then(
-                            function(doc){
-                                req.session.currentUser = doc;
-                                res.json(doc);
-                            },
-                            function(err){
-                                res.status(400).send(err);
-                            }
-                        );
-                }
-            else{
-                    console.log("user exists");
-                    res.json(null);
-                }},
-                function(err){
 
-                    res.status(400).send(err);
-                }
-            )
-    }
 
     function authorized(req, res, next) {
         if (!req.isAuthenticated()) {
