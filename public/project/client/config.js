@@ -110,7 +110,10 @@
             .when("/event/:eventId/:adminId/admin-table",{
                 templateUrl:"views/admin/admin.table.view.html",
                 controller: "AdminTableController",
-                controllerAs:"model"
+                controllerAs:"model",
+                resolve:{
+                    loggedin:checkCurrentUser
+                }
             })
             .when("/event/:eventId/:adminId/admin-administration",{
                 templateUrl:"views/admin/admin.administration.view.html",
