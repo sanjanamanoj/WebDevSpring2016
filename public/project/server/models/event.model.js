@@ -194,7 +194,25 @@ module.exports = function (db, mongoose) {
                     newEvent.schedule[i].times.splice(j,1);
                 }}
         }
-        EventModel.update({_id:id},{$set:event}, function(err,doc){
+        EventModel.update({_id:id},{
+            adminId: event.adminId,
+            title: event.title,
+            address: event.address,
+            description: event.description,
+            name: event.name,
+            userId: event.userId,
+            email: event.email,
+            schedule:event.schedule,
+            hidden:event.hidden,
+            limit:event.limit,
+            limitNumber:event.limitNumber,
+            everyone:event.everyone,
+            invite: event.invite,
+            participate:event.participate,
+            invitedEmails:event.invitedEmails,
+            closePoll:event.closePoll,
+            nonParticipants:event.nonParticipants
+        }, function(err,doc){
             if(err){
                 deferred.reject(err);
             }
