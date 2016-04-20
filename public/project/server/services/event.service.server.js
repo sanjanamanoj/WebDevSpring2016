@@ -133,17 +133,31 @@ module.exports = function(app, eventModel,uuid) {
         console.log("calling server");
         var id = req.params.eventId;
         var event = req.body;
+        var userId = event.userId;
         eventModel.deleteEventById(id)
             .then(
                 function(doc){
-                    eventModel.createEvent(event)
-                        .then(
-                            function(doc){
-                                res.json(doc);
-                            },
-                            function(err){
-                                res.status(400).send(err);
-                            });
+                    if(userId=='000') {
+                        eventModel.createEvent(event)
+                            .then(
+                                function (doc) {
+                                    res.json(doc);
+                                },
+                                function (err) {
+                                    res.status(400).send(err);
+                                });
+                    }
+                    else{
+                        eventModel.createEventForUser(userId ,event)
+                            .then(
+                                function (doc) {
+                                    res.json(doc);
+                                },
+                                function (err) {
+                                    res.status(400).send(err);
+                                });
+
+                    }
                 },
                 function(err){
                     res.status(400).send(err);
