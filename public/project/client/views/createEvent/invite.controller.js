@@ -22,7 +22,7 @@
                     "Event Title: "+event.title+
                     "\nEvent Location: "+event.address+
                     "\nParticipation link:\n"+
-                    "http://webdev2016-mardikaratindra.rhcloud.com/project/client/#/event/" + event._id + "/poll"
+                    "http://webdev2016-manojsanjana.rhcloud.com/project/client/#/event/" + event._id + "/poll"
                 };
 
                 EventService.sendMail(mailOptions)
@@ -78,7 +78,7 @@
 
 
             //console.log($rootScope.event.participate);
-            console.log($rootScope.event._id);
+            //console.log($rootScope.event._id);
             if($rootScope.event._id){
                 EventService
                     .updateEventById($rootScope.event._id, $rootScope.event)
@@ -97,9 +97,9 @@
                             sendmailAdmin(response.data);
                             if (response.data) {
                                 //$rootScope.inviteurl = "localhost:3000/project/client/#/event/" + response.data._id + "/poll";
-                                $rootScope.inviteurl = "http://webdev2016-mardikaratindra.rhcloud.com/project/client/#/event/" + response.data._id + "/poll";
+                                $rootScope.inviteurl = "http://webdev2016-manojsanjana.rhcloud.com/project/client/#/event/" + response.data._id + "/poll";
                                 //$rootScope.adminurl = "localhost:3000/project/client/#/event/" + response.data._id + "/" + response.data.adminId + "/admin-table";
-                                $rootScope.adminurl = "http://webdev2016-mardikaratindra.rhcloud.com/project/client/#/event/" + response.data._id + "/" + response.data.adminId + "/admin-table";
+                                $rootScope.adminurl = "http://webdev2016-manojsanjana.rhcloud.com/project/client/#/event/" + response.data._id + "/" + response.data.adminId + "/admin-table";
                                 EventService
                                     .setEvent(response.data);
                             }
@@ -130,7 +130,7 @@
 
                 }
                 }
-            }
+            };
             //$rootScope.event=null;
 
         }
