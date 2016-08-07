@@ -14,6 +14,7 @@
         vm.addField = addField;
         vm.reorder = reorder;
         vm.sortfield= sortField;
+
         vm.options =
             [
                 'Single Line Text Field',
