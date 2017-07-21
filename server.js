@@ -12,7 +12,7 @@ var router = express.Router();
 // install and require the mongoose library
 var mongoose      = require('mongoose');
 
-var connectionString = 'mongodb://127.0.0.1:27017/form-maker';
+var connectionString = 'mongodb://sanjana:icb01873S!@ds163612.mlab.com:63612/form-maker';
 
 
 if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
@@ -24,7 +24,7 @@ if(process.env.OPENSHIFT_MONGODB_DB_PASSWORD){
 }
 
 
-var db = mongoose.connect(connectionString);
+var db = mongoose.connect(connectionString,{ useMongoClient: true });
 
 
 app.use(bodyParser.json());
@@ -41,7 +41,7 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port = process.env.OPENSHIFT_NODEJS_PORT || 3000;
+var port = process.env.PORT || 3000; //process.env.OPENSHIFT_NODEJS_PORT ||
 
 app.get('/env', function(req, res){
     res.json(process.env);
@@ -55,4 +55,6 @@ app.get('/env', function(req, res){
 require("./public/assignment/server/app.js")(app, db, mongoose);
 require("./public/project/server/app.js")(app,db,mongoose,uuid);
 
-app.listen(port, ipaddress);
+app.listen(port, function() {
+    console.log('Listening to port...'+ port);
+});
