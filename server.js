@@ -41,7 +41,7 @@ app.use(passport.session());
 
 app.use(express.static(__dirname + '/public'));
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1';
-var port = process.env.PORT || 80; //process.env.OPENSHIFT_NODEJS_PORT ||
+var port = process.env.PORT || 3000; //process.env.OPENSHIFT_NODEJS_PORT ||
 
 app.get('/env', function(req, res){
     res.json(process.env);
